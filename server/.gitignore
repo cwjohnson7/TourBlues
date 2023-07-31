@@ -1,0 +1,5 @@
+#misc
+/node_modules
+
+#temporary
+.DS_Store

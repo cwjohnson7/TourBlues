@@ -12,6 +12,8 @@ function Navigation() {
 
   const {user, setUser} = useState('authenticated');
   const authenticated = useSelector(state => state.auth.authenticated);
+  console.log(authenticated)
+  console.log('navbar')
   // setUser(true);
 
   const navigate = useNavigate();
@@ -35,7 +37,8 @@ function Navigation() {
 
   const renderSignOut = () => {
     /* verify if user is authenticated */
-    if (authenticated) {
+    if (authenticated === 'authenticated') {
+      console.log('authenticated in renderSignOut')
       return (
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -52,20 +55,19 @@ function Navigation() {
           </Nav>
         </Navbar.Collapse>
       ) 
-    }
+    } else {
+      console.log('not authenticated')
+      return;}
   }
 
   return (
     
           <Navbar expand="xl" className="bg-body-tertiary" >
             <Container>
-      {/* <NavContainer> */}
       
         <Navbar.Brand onClick={handleReturnHome}>TourBlues</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-        {renderSignOut(user)}
-        
-        {/* </NavContainer> */}
+        {renderSignOut()}
         </Container>
     </Navbar>
       
@@ -73,15 +75,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-// Navbar = styled.div`
-//   margin-left: 20px;
-// `
-
-const NavContainer = styled.div`
-  margin-left: 10px;
-  text-align: left;
-  width: 100%;
-  display: block;
-  float: left;
-`

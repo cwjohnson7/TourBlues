@@ -9,3 +9,5 @@ const VenueSchema = new Schema ({
   email: String,
   completed: Boolean,
 })
+
+module.exports = mongoose.model('venue', VenueSchema)

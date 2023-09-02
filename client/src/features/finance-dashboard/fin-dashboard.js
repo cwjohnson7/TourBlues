@@ -52,7 +52,7 @@ function FinanceDashboard() {
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>Phone (Optional)</Form.Label>
-                <Form.Control type="text" placeholder="Phone number (ex. 999-999-9999)" />
+                <Form.Control type="text" placeholder="Phone number (ex. 999-999-9999)"/>
               </Form.Group>
             </Row>
 

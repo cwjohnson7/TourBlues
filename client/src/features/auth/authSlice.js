@@ -10,19 +10,19 @@ const initialState = {
   lastName: null
 }
 
-export const signIn = createAsyncThunk(
-  'auth/signIn',
-  async (data, callback) => {
-    try {
-      // const response = await axios.post(base_URL + '/api/signIn', data)
-      const response = "authenticated";
-      callback();
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  }
-)
+// export const signIn = createAsyncThunk(
+//   'auth/signIn',
+//   async (data, callback) => {
+//     try {
+//       // const response = await axios.post(base_URL + '/api/signIn', data)
+//       const response = "authenticated";
+//       callback();
+//       return response;
+//     } catch (err) {
+//       throw err;
+//     }
+//   }
+// )
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -36,23 +36,32 @@ export const authSlice = createSlice({
         lastName: null
       }
     },
+    signIn(state, action){
+      const { authenticated } = action.payload;
+     return  {...state,
+      authenticated: authenticated,
+      email: 'cliff@gmail.com',
+      firstName: 'Cliff',
+      lastName: 'Jameson'
+    }
+    }
   },
-  extraReducers: (builder) => {
-    builder
-    .addCase(signIn.pending, (state) => {
-      state.status = 'Loading'
-      state.error = null
-    })
-    .addCase(signIn.fulfilled, (state, action) => {
-      state.status = 'Fulfilled'
-      state.error = null
-      state.authenticated = action.payload.data
-    })
-    .addCase(signIn.rejected, (state, action) => {
-      state.status = 'Rejected'
-      state.error = action.error.message
-    })
-  }
+  // extraReducers: (builder) => {
+  //   builder
+  //   .addCase(signIn.pending, (state) => {
+  //     state.status = 'Loading'
+  //     state.error = null
+  //   })
+  //   .addCase(signIn.fulfilled, (state, action) => {
+  //     state.status = 'Fulfilled'
+  //     state.error = null
+  //     state.authenticated = action.payload.data
+  //   })
+  //   .addCase(signIn.rejected, (state, action) => {
+  //     state.status = 'Rejected'
+  //     state.error = action.error.message
+  //   })
+  // }
 })
-export const { signOut } = authSlice.actions
+export const { signOut, signIn } = authSlice.actions
 export default authSlice.reducer;

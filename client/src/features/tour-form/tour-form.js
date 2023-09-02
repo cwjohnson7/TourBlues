@@ -20,8 +20,7 @@ function TourForm() {
         <Card.Body>
           <Card.Title>Create a Tour</Card.Title>
           <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
+            Kickoff your tour with the initial details here!
           </Card.Text>
           <Button variant="primary" onClick={handleShow}>Create Tour</Button>
         </Card.Body>
@@ -32,12 +31,12 @@ function TourForm() {
           <Modal.Title>Create a Tour</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Row className="mb-3">
-              <Form.Group as={Col} controlId="formGridEmail">
-                <Form.Label>Tour Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter tour name" />
-              </Form.Group>
-            </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Label>Tour Name</Form.Label>
+              <Form.Control type="text" placeholder="Enter tour name" />
+            </Form.Group>
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

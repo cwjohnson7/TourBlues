@@ -1,6 +1,8 @@
+const artist = require('../models/artist');
 const Artist = require('../models/artist')
 const User = require('../models/user');
 const jwt = require('jwt-simple');
+const keys = require('../config/keys')
 
 function tokenForUser(user) {
   return jwt.encode({ sub: user.id,
@@ -10,11 +12,10 @@ function tokenForUser(user) {
 }
 
 exports.signUp = async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
   //req.body.artist is the artist name entered on the sign-up form
-  const artist = req.body.artist;
-  console.log(req.body, "sign UP");
+  const { email, bandEmail, password, firstName, lastName, phone, handle, artist } = req.body
+  
+  console.log("sign UP req.body: ", req.body);
 
   if (!email || !password) {
     return res.status(422).send({ error: "You must provide email and password"})
@@ -31,9 +32,9 @@ exports.signUp = async (req, res) => {
 
     Artist.findOne({ name: artist }).then((existingArtist) => {
       if (!existingArtist) {
-        let newArtist = new Artist({
+        const newArtist = new Artist({
           name: req.body.artist,
-          email: req.body.email,
+          email: req.body.artistEmail || req.body.email,
           contact: req.body.firstName + ' ' + req.body.lastName,
           phone: req.body.phone || '',
           handle: req.body.handle || ''
@@ -50,7 +51,7 @@ exports.signUp = async (req, res) => {
         const artistName = newArtist.name;
         user.setPassword(password);
         user.save().then(() => {
-          res.json({ token: tokenForUser(user), user, artistName } )
+          res.status(200).json({ token: tokenForUser(user), user, newArtist } )
         });
         console.log("NewArtist: ", newArtist);
       } else {
@@ -62,9 +63,10 @@ exports.signUp = async (req, res) => {
         artistName: existingArtist.name
         });
         const artistName = existingArtist.name;
+        console.log('existing Artist: ', artistName);
         user.setPassword(password);
         user.save().then(() => {
-          res.json({ token: tokenForUser(user), user, artistName})
+          res.status(200).json({ token: tokenForUser(user), user, artistName})
         })
       };
     });
@@ -72,10 +74,26 @@ exports.signUp = async (req, res) => {
 }
 
 exports.signIn = async (req, res) => {
+  const user = req.user;
+  const id = req.user.artistId
+  const artist = await Artist.findById(id)
 
+  res.status(200).send({
+    token: tokenForUser(user),
+    user: user,
+    artistName: artist.name
+  })
 }
 
 exports.currentUser = async (req, res) => {
 
+  const id = req.user.artist
+  const artist = await Artist.findById(id);
+  const user = {
+    email: req.user.email,
+    token: tokenForUser(req.user),
+    artistName: artist.name
+  }
+  res.status(200).send(user);
 }
 

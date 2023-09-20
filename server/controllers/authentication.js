@@ -87,7 +87,7 @@ exports.signIn = async (req, res) => {
 
 exports.currentUser = async (req, res) => {
 
-  const id = req.user.artist
+  const id = req.user.artistId
   const artist = await Artist.findById(id);
   const user = {
     email: req.user.email,

@@ -6,6 +6,7 @@ const ArtistSchema = new Schema ({
   contact: String,
   email: String,
   handle: { type: String, unique: true},
+  tours: [{ type: Schema.Types.ObjectId, ref: 'tour' }],
   events: [{ type: Schema.Types.ObjectId, ref: 'event' }],
   phone: String,
 })

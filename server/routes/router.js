@@ -5,6 +5,7 @@ const Authentication = require("../controllers/authentication");
 const Event = require('../controllers/event');
 const Venue = require("../controllers/venue");
 const Tour = require('../controllers/tour');
+const Revenue = require('../controllers/revenue');
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 const requireSignin = passport.authenticate("local", { session: false });
@@ -36,6 +37,9 @@ module.exports = (app) => {
   app.post('/api/addTour', Tour.addTour)
   app.put('/api/updateTour', Tour.updateTour)
   app.delete('/api/removeTour', Tour.removeTour)
+
+  //Square Pay
+  app.get('/api/getRevenue', Revenue.getRevenue)
 
   //venue - avoided as venues are created with events
   // app.post('/api/addVenue' , Venue.addVenue)

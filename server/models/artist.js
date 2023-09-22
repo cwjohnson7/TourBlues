@@ -5,6 +5,10 @@ const ArtistSchema = new Schema ({
   name: String,
   contact: String,
   email: String,
-  handle: String,
+  handle: { type: String, unique: true},
+  tours: [{ type: Schema.Types.ObjectId, ref: 'tour' }],
+  events: [{ type: Schema.Types.ObjectId, ref: 'event' }],
   phone: String,
 })
+
+module.exports = mongoose.model('artist', ArtistSchema);

@@ -3,5 +3,8 @@ const Schema = mongoose.Schema;
 
 const RevenueSchema = new Schema({
   name: String,
-  amount: Number
-})
+  amount: Number,
+  artist: { type: Schema.Types.ObjectId, ref: 'artist' }
+});
+
+module.exports = mongoose.model('revenue', RevenueSchema);

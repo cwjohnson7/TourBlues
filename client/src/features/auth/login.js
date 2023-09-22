@@ -20,13 +20,14 @@ function LogIn() {
     navigate("/signup");
   }
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = () => {
     dispatch(
-      signIn(data, () => {
-        navigate("/homepage");
-      })
+      // signIn(data, () => {
+      //   navigate("/homepage");
+      // })
+      signIn({authenticated: 'authenticated'})
     )
-    
+    navigate('/homepage')
   }
 
   return (
@@ -54,7 +55,7 @@ function LogIn() {
       </Form.Group>
       
       <Form.Group className="mb-3">
-        <Form.Text className="text-muted">No Account?    </Form.Text>
+        <Form.Text className="text-muted">No Account?</Form.Text>
         <br></br>
         <Button variant="secondary" type="submit" onClick={handleSignUpClick}>Sign Up</Button>
       </Form.Group>

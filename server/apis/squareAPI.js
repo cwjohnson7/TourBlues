@@ -1,4 +1,4 @@
-const { squareClient } = require('./configs/axiosClients')
+const { squareClient } = require('./configs/axiosClients');
 
 const SquareAPI =  {
   get: async () => {

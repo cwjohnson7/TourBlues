@@ -15,7 +15,7 @@ function LineupForm() {
 
   return (
     <>
-    <LineupButton variant="secondary" onClick={handleShow}>
+    <LineupButton variant="primary" onClick={handleShow}>
     + Add Lineup
 
       </LineupButton>

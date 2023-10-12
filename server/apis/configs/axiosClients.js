@@ -9,4 +9,4 @@ const squareClient = axios.create({
   },
 })
 
-module.exports = { squareClient }
+module.exports = { squareClient  }

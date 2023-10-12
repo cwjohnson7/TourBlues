@@ -55,6 +55,41 @@ exports.addEvent = async (req, res) => {
   res.status(200).send({ event, existingVenue, artistId })
 }
 
+exports.getEventsByTour = async (req, res) => {
+  try {
+    const tourId = req.params.tourId;
+    // ^^ will instead probably use req.user.artistId to grab artist Id and then search for tours associated w/ that artist; can populate lineups/events here or do subsequent get requests for each time user navigates to drill down to the same
+    const events = await Event.find({ tour: tourId })
+    // .populate({
+    //   path: 'events',
+    //   model: 'event',
+    //   populate: [
+    //     {
+    //       path: 'venue',
+    //       model: 'venue'
+    //     },
+    //     {
+    //       path: 'lineup',
+    //       model: 'artist'
+    //     }
+    //   ]
+    // });
+    res.status(200).send({ events });
+  } catch (err) {
+    throw err;
+  }
+}
+
+exports.getEventById = async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    const event = await Event.findById(eventId);
+    res.status(200).send({ event });
+  } catch(error) {
+    throw error;
+  }
+}
+
 exports.updateEvent = async (req, res) => {
   const { newDate, newDoors, newSetLength, eventId } = req.body;
   const id = eventId;

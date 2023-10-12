@@ -56,6 +56,19 @@ exports.addLineupArtist = async (req, res) => {
     throw error;
   }
 }
+
+exports.getArtistById = async (req, res) => {
+  try {
+    const { artistId } = req.body;
+
+    const artist = await Artist.findById(artistId);
+  
+    res.status(200).send({artist})
+  } catch (error) {
+    throw error;
+  }
+}
+
 //need to test this route
 exports.updateArtist = async (req, res) => {
   const { artistId, name, contact, email, handle, phone } = req.body;

@@ -25,18 +25,24 @@ module.exports = (app) => {
   app.delete('/api/removeArtist', Artist.removeArtist)
   app.delete('/api/removeLineupArtist', Artist.removeLineupArtist)
   app.get('/api/getArtist',  Artist.getArtist)
-
+  app.get('/api/getArtistById',  Artist.getArtistById)
+  
   //event
   //tested
   app.post('/api/addEvent', Event.addEvent)
+  app.get('/api/getEvents/:tourId', Event.getEventsByTour)
   app.put('/api/updateEvent', Event.updateEvent)
   app.delete('/api/removeEvent', Event.removeEvent)
 
   //tour
   //tested
   app.post('/api/addTour', Tour.addTour)
+  app.get('/api/getUserTours/:artist', Tour.getUserTours)
   app.put('/api/updateTour', Tour.updateTour)
   app.delete('/api/removeTour', Tour.removeTour)
+
+  //Google Places API
+  app.get('/api/fetchVenues/:query', Venue.fetchVenues)
 
   //Square Pay
   app.get('/api/getRevenue', Revenue.getRevenue)

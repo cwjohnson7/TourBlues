@@ -14,8 +14,36 @@ exports.addTour = async (req, res) => {
     tour.save();
     result.tours.push(tour);
     result.save();
-    res.status(200).send({ tour, result })
+    res.status(200).send({ tour, result });
   })
+}
+
+exports.getUserTours = async (req, res) => {
+  try {
+    const artistId  = req.params.artist;
+
+    // console.log('req.params', req.params);
+    // ^^ will instead probably use req.user.artistId to grab artist Id and then search for tours associated w/ that artist; can populate lineups/events here or do subsequent get requests for each time user navigates to drill down to the same
+    const tours = await Tour.find({ artist: artistId })
+    // console.log('tours response ', tours);
+    .populate({
+      path: 'events',
+      model: 'event',
+      populate: [
+        {
+          path: 'venue',
+          model: 'venue'
+        },
+        {
+          path: 'lineup',
+          model: 'artist'
+        }
+      ]
+    });
+    res.status(200).send({ tours });
+  } catch (err){
+    throw err;
+  }
 }
 
 exports.updateTour = async (req, res) => {

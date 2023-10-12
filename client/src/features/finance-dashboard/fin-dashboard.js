@@ -21,8 +21,7 @@ function FinanceDashboard() {
         <Card.Body>
           <Card.Title>Finance Dashboard</Card.Title>
           <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
+            Track your tour finances by logging expenses and revenue!
           </Card.Text>
           <Button variant="primary" onClick={handleShow}>Go to Dashboard</Button>
         </Card.Body>
@@ -110,6 +109,7 @@ function FinanceDashboard() {
 export default FinanceDashboard;
 
 const FinCard = styled(Card)`
+height: 200px;
 margin-left: 20px;
 margin-right: 20px;
 `

@@ -36,14 +36,14 @@ export const authSlice = createSlice({
         lastName: null
       }
     },
-    signIn(state, action){
+    signIn(state, action) {
       const { authenticated } = action.payload;
-     return  {...state,
-      authenticated: authenticated,
-      email: 'cliff@gmail.com',
-      firstName: 'Cliff',
-      lastName: 'Jameson'
-    }
+      return  {...state,
+        authenticated: authenticated,
+        email: 'cliff@gmail.com',
+        firstName: 'Cliff',
+        lastName: 'Jameson'
+      }
     }
   },
   // extraReducers: (builder) => {

@@ -5,16 +5,16 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 
-import Row from 'react-bootstrap/Row'
+import Row from 'react-bootstrap/Row';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, matchPath, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import ListGroup from 'react-bootstrap/ListGroup';
 import LineupForm from '../event/lineup-form';
 import EventForm from '../event/event-form';
-import { getUserToursThunk } from '../homepage/HomePageSlice';
-import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import ListGroup from 'react-bootstrap/ListGroup'
 
+import EventUpdate from '../event/event-update';
 
 function TourView() {
   const dispatch = useDispatch();
@@ -23,21 +23,22 @@ function TourView() {
   const location = useLocation();
   const path = matchPath('/tours/:tourId', location.pathname);
   const pathId = path.params.tourId;
-  const tour = tours.find(tour => tour._id === pathId);
-  const events = tour.events;
+  const tour = tours.find((element) => element._id === pathId);
+  const { events } = tour;
   const tourName = tour.name;
-  // useEffect(() => {
-  //   const artistId = '64f92397aa11269c12b9c746';
-  //   dispatch(getUserToursThunk({artistId}));
-  // }, [dispatch, tour])
+  useEffect(() => {}, [dispatch, tour.events]);
   console.log('events ref: ', events);
 
   const handleViewEvent = () => {
-    navigate("/homepage");
-  }
+    navigate('/homepage');
+  };
   const handleHomePageClick = () => {
-    navigate("/homepage");
-  }
+    navigate('/homepage');
+  };
+
+  const testFunc = () => {
+    console.log('hello');
+  };
 
   const renderEventsList = () => {
     if (events) {
@@ -46,19 +47,27 @@ function TourView() {
           <Accordion.Header> {event.venue.name}</Accordion.Header>
           <Accordion.Body>
             <Row>
-              <Col >
-              Should have info about the event here. The address is {event.venue.address}. Will need another map function to list out the lineup.
+              <Col>
+                <h6>Address: </h6>
+                {event.venue.address}
+                {event.venue.city},
+                <div>
+                  {event.venue.state} {event.venue.zip}
+                </div>
               </Col>
-              <Col >
-                Lineup: 
-                  <ListGroup>
-                    {event.lineup.map((artist)=> (
-                      <ListGroupItem>{artist.name} ({artist.handle})</ListGroupItem>
-                    ))}
-                  </ListGroup>
+              <Col>
+                <h6>Lineup: </h6>
+                <ListGroup>
+                  {event.lineup.map((artist) => (
+                    <ListGroupItem>
+                      {artist.name} ({artist.handle})
+                    </ListGroupItem>
+                  ))}
+                </ListGroup>
               </Col>
-              <Col >
-              Date: {event.date}
+              <Col>
+                <h6>Date: </h6>
+                {event.date}
               </Col>
             </Row>
             <Row>
@@ -66,26 +75,32 @@ function TourView() {
             </Row>
 
             <Row>
-            <Col xs="auto">
-            <LineupForm />
-            </Col>
-            <Col xs="auto">
-                <Button id={tour._id} variant="success" onClick={handleViewEvent}>Update Event Details</Button>
+              <Col xs="auto">
+                <LineupForm tourId={pathId} eventId={event._id} />
               </Col>
               <Col xs="auto">
-              <Button id={tour._id} variant="danger" onClick={handleViewEvent}>Delete Event</Button>
-            </Col>
-
+                <EventUpdate
+                  tourId={pathId}
+                  eventId={event._id}
+                  venueId={event.venue._id}
+                  event={event}
+                />
+              </Col>
+              <Col xs="auto">
+                <Button
+                  id={tour._id}
+                  variant="danger"
+                  onClick={handleViewEvent}
+                >
+                  Delete Event
+                </Button>
+              </Col>
             </Row>
-  
-
           </Accordion.Body>
         </Accordion.Item>
-      ))
-    } else {
-      return;
+      ));
     }
-  }
+  };
 
   return (
     <EventViewContainer>
@@ -93,22 +108,21 @@ function TourView() {
       {/* <h5>Events: </h5> */}
       <Row>
         <Col>
-
-        <Accordion>
-        <Card>
-          <Card.Header>
-            <Row>
-              <Col>
-                <h4>Events: </h4>
-              </Col>
-              <Col xs={6}></Col>
-              <Col>
-                <EventForm/>
-              </Col>
-            </Row>
-          </Card.Header>
-      {renderEventsList()}
-      {/* <Accordion.Item eventKey="0">
+          <Accordion>
+            <Card>
+              <Card.Header>
+                <Row>
+                  <Col>
+                    <h4>Events: </h4>
+                  </Col>
+                  <Col xs={6} />
+                  <Col>
+                    <EventForm tourId={pathId} />
+                  </Col>
+                </Row>
+              </Card.Header>
+              {renderEventsList()}
+              {/* <Accordion.Item eventKey="0">
         <Accordion.Header>Tour Date One</Accordion.Header>
         <Accordion.Body>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -132,11 +146,13 @@ function TourView() {
           culpa qui officia deserunt mollit anim id est laborum.
         </Accordion.Body>
       </Accordion.Item> */}
-    </Card>
-    </Accordion>
+            </Card>
+          </Accordion>
         </Col>
       </Row>
-    <HomePageButton variant="primary" onClick={handleHomePageClick}>Back to Homepage</HomePageButton>
+      <HomePageButton variant="primary" onClick={handleHomePageClick}>
+        Back to Homepage
+      </HomePageButton>
     </EventViewContainer>
   );
 }
@@ -144,12 +160,12 @@ function TourView() {
 export default TourView;
 
 const HomePageButton = styled(Button)`
-margin-top: 20px;
-`
+  margin-top: 20px;
+`;
 
 const EventViewContainer = styled(Container)`
-margin-top: 20px;
-`
-const HeaderButton = styled(Col)`
-justify-content: right;
-`
+  margin-top: 20px;
+`;
+// const HeaderButton = styled(Col)`
+// justify-content: right;
+// `

@@ -7,10 +7,10 @@ const paymentsApi = 'https://connect.squareupsandbox.com/v2/payments';
 
 exports.getRevenue = async (req, res) => {
   try {
-    const payments = await SquareAPI.get()
-    
-    res.status(200).send({ payments })
+    const payments = await SquareAPI.get();
+
+    res.status(200).send({ payments });
   } catch (err) {
     console.log(err);
   }
-}
+};

@@ -1,16 +1,16 @@
+const { Client } = require('@googlemaps/google-maps-services-js');
 const keys = require('../config/keys');
-const Sample = require('../models/sample-data')
+const Sample = require('../models/sample-data');
 const Venue = require('../models/venue');
-const {Client} = require('@googlemaps/google-maps-services-js');
-
 
 const client = new Client({});
 
 exports.addVenue = async (req, res) => {
-  const { name, address, city, state, zip, contact, phone, email, completed } = req.body;
+  const { name, address, city, state, zip, contact, phone, email, completed } =
+    req.body;
 
   res.status(200).send(req.body);
-}
+};
 
 exports.fetchVenues = async (req, res) => {
   const queryString = req.params.query;
@@ -24,7 +24,6 @@ exports.fetchVenues = async (req, res) => {
 
   const searchResults = Sample.sampleData;
   // console.log('searchResults: ', searchResults);
-  
-  res.status(200).send({searchResults});
 
-}
+  res.status(200).send({ searchResults });
+};

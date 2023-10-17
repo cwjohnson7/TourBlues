@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const VenueSchema = new Schema ({
+const { Schema } = mongoose;
+
+const VenueSchema = new Schema({
   name: String,
   address: String,
   city: String,
@@ -11,6 +12,6 @@ const VenueSchema = new Schema ({
   phone: String,
   email: String,
   completed: Boolean,
-})
+});
 
-module.exports = mongoose.model('venue', VenueSchema)
+module.exports = mongoose.model('venue', VenueSchema);

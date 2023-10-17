@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import styled from 'styled-components';
@@ -23,17 +22,25 @@ function FinanceDashboard() {
           <Card.Text>
             Track your tour finances by logging expenses and revenue!
           </Card.Text>
-          <Button variant="primary" onClick={handleShow}>Go to Dashboard</Button>
+          <Button variant="primary" onClick={handleShow}>
+            Go to Dashboard
+          </Button>
         </Card.Body>
       </FinCard>
-      <Offcanvas show={show} onHide={handleClose} backdrop="static" placement="end">
+      <Offcanvas
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        placement="end"
+      >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Finance Dashboard</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          I will not close if you click outside of me. Enter Venue/Address, Artists, and Contact Info.
+          I will not close if you click outside of me. Enter Venue/Address,
+          Artists, and Contact Info.
           <Form>
-            <br/>
+            <br />
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Venue</Form.Label>
@@ -44,14 +51,20 @@ function FinanceDashboard() {
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Venue Contact (Optional)</Form.Label>
-                <Form.Control type="text" placeholder="Enter contact name at venue" />
+                <Form.Control
+                  type="text"
+                  placeholder="Enter contact name at venue"
+                />
               </Form.Group>
             </Row>
 
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>Phone (Optional)</Form.Label>
-                <Form.Control type="text" placeholder="Phone number (ex. 999-999-9999)"/>
+                <Form.Control
+                  type="text"
+                  placeholder="Phone number (ex. 999-999-9999)"
+                />
               </Form.Group>
             </Row>
 
@@ -102,14 +115,14 @@ function FinanceDashboard() {
           </Form>
         </Offcanvas.Body>
       </Offcanvas>
-      </>
+    </>
   );
 }
 
 export default FinanceDashboard;
 
 const FinCard = styled(Card)`
-height: 200px;
-margin-left: 20px;
-margin-right: 20px;
-`
+  height: 200px;
+  margin-left: 20px;
+  margin-right: 20px;
+`;

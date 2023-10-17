@@ -1,23 +1,22 @@
-import EventForm from "../event/event-form";
-import Accordion from "react-bootstrap/Accordion"
+import Accordion from 'react-bootstrap/Accordion';
 import Container from 'react-bootstrap/Container';
-import TourForm from "../tour/tour-form";
-import FinanceDashboard from "../finance-dashboard/fin-dashboard";
 import styled from 'styled-components';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from "react-bootstrap/esm/Button";
+import Button from 'react-bootstrap/esm/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, matchPath, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { getUserToursThunk } from "./HomePageSlice";
+import { useLocation, matchPath, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import FinanceDashboard from '../finance-dashboard/fin-dashboard';
+import TourForm from '../tour/tour-form';
+import EventForm from '../event/event-form';
+import { getUserToursThunk } from './HomePageSlice';
 
-
-function HomePage () {
-  const { token } = useSelector(state => state.auth.authenticated)
+function HomePage() {
+  const { token } = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const tours = useSelector(state => state.homePage.tours);
+  const tours = useSelector((state) => state.homePage.tours);
   // const location = useLocation();
   // const path = matchPath("/tours/:tourId", location.pathname);
   // const pathId = path.params.tourId;
@@ -25,15 +24,14 @@ function HomePage () {
   const artistId = '64f92397aa11269c12b9c746';
 
   useEffect(() => {
-
-    dispatch(getUserToursThunk({artistId}))
+    dispatch(getUserToursThunk({ artistId }));
   }, [token, artistId, dispatch]);
 
   const handleTourViewClick = (e) => {
     const tourId = e.currentTarget.id;
     // console.log('e.currentTarget.id ', e.currentTarget.id)
     navigate(`/tours/${tourId}`);
-  }
+  };
   const renderTourList = () => {
     if (tours) {
       return tours.map((tour) => (
@@ -42,20 +40,27 @@ function HomePage () {
           <Accordion.Body>
             <Container>
               <Row md={7}>
-                <Col>Click 'View Tour Details' to view, add, and update Events for the {tour.name}.</Col>
+                <Col>
+                  Click 'View Tour Details' to view, add, and update Events for
+                  the {tour.name}.
+                </Col>
               </Row>
-              <br/>
+              <br />
               {/* <Row md={7} className="justify-content-center"> */}
               {/* <CardCol> */}
-        {/* <ActionsContainer> */}
-          
-        {/* </ActionsContainer> */}
-        {/* </CardCol> */}
+              {/* <ActionsContainer> */}
+
+              {/* </ActionsContainer> */}
+              {/* </CardCol> */}
               {/* </Row> */}
             </Container>
-            <Row >
+            <Row>
               <Col xs="auto">
-                <Button id={tour._id} variant="primary" onClick={handleTourViewClick}>
+                <Button
+                  id={tour._id}
+                  variant="primary"
+                  onClick={handleTourViewClick}
+                >
                   View Tour Details
                 </Button>
               </Col>
@@ -63,9 +68,7 @@ function HomePage () {
             </Row>
           </Accordion.Body>
         </Accordion.Item>
-      ))
-    } else {
-      return;
+      ));
     }
 
     // return(
@@ -101,49 +104,47 @@ function HomePage () {
     //   </Accordion.Item>
     // </Accordion>
     // )
-  }
+  };
 
-
-  return(
+  return (
     <Container>
       <Container display="flex">
-      <Row className="justify-content-md-center">
-        <CardCol md={4}>
-          <ActionsContainer>
-            <TourForm />
-          </ActionsContainer>
-        </CardCol>
-        {/* <CardCol>
+        <Row className="justify-content-md-center">
+          <CardCol md={4}>
+            <ActionsContainer>
+              <TourForm />
+            </ActionsContainer>
+          </CardCol>
+          {/* <CardCol>
         <ActionsContainer>
           
         </ActionsContainer>
         </CardCol> */}
-        <CardCol md={4}>
-          <ActionsContainer>
-            <FinanceDashboard />
-          </ActionsContainer>
-        </CardCol>
-      </Row>
+          <CardCol md={4}>
+            <ActionsContainer>
+              <FinanceDashboard />
+            </ActionsContainer>
+          </CardCol>
+        </Row>
       </Container>
       <Row className="justify-content-md-center">
         <Col md={8}>
           <Accordion>{renderTourList()}</Accordion>
         </Col>
       </Row>
-      </Container>
-  )
+    </Container>
+  );
 }
 
 export default HomePage;
 
 const ActionsContainer = styled(Container)`
-margin-top: 8%;
-margin-bottom: 8%;
-`
-
-
+  margin-top: 8%;
+  margin-bottom: 8%;
+`;
 
 const CardCol = styled(Col)`
-justify-content: center;
-margin-top: 1%;
-margin-bottom: 1%;`
+  justify-content: center;
+  margin-top: 1%;
+  margin-bottom: 1%;
+`;

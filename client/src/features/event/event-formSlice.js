@@ -62,6 +62,25 @@ export const addEventThunk = createAsyncThunk(
   }
 );
 
+export const updateEventThunk = createAsyncThunk(
+  'eventForm/updateEventThunk',
+  async (data, thunkAPI) => {
+    try {
+      const apiEndpoint = '/api/updateEvent';
+      const response = await axios.put(baseURL + apiEndpoint, data);
+      console.log('just update data: ', data);
+      // const response = data;
+      console.log('response.data from thunk: ', response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error.response?.data?.message || error.message,
+        status: error.response?.status,
+      });
+    }
+  }
+);
+
 export const eventFormSlice = createSlice({
   name: 'eventForm',
   initialState,
@@ -90,7 +109,7 @@ export const eventFormSlice = createSlice({
         state.error = null;
       })
       .addCase(addEventThunk.fulfilled, (state, action) => {
-        console.log('query results: ', action.payload);
+        console.log('event results: ', action.payload);
 
         // state.events = action.payload;
         state.status = 'fulfilled';

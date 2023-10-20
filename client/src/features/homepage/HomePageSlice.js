@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addEventThunk } from '../event/event-formSlice';
+import { addEventThunk, updateEventThunk } from '../event/event-formSlice';
 
 const baseURL = 'http://localhost:8000';
 
@@ -69,6 +69,25 @@ export const addLineupArtistThunk = createAsyncThunk(
       const apiEndpoint = '/api/addLineupArtist';
       const response = await axios.post(baseURL + apiEndpoint, data);
       console.log('lineupArtistThunk data: ', data);
+      // const response = data;
+      console.log('response.data from thunk: ', response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error.response?.data?.message || error.message,
+        status: error.response?.status,
+      });
+    }
+  }
+);
+
+export const updateLineupArtistThunk = createAsyncThunk(
+  'homePage/updateLineupArtistThunk',
+  async (data, thunkAPI) => {
+    try {
+      const apiEndpoint = '/api/updateArtist';
+      const response = await axios.put(baseURL + apiEndpoint, data);
+      console.log('updatelineupArtistThunk data: ', data);
       // const response = data;
       console.log('response.data from thunk: ', response.data);
       return response.data;
@@ -183,6 +202,56 @@ export const homePageSlice = createSlice({
         state.error = null;
       })
       .addCase(addLineupArtistThunk.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload.status;
+      })
+      .addCase(updateEventThunk.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(updateEventThunk.fulfilled, (state, action) => {
+        const { eventId, updatedEvent, updatedVenue } = action.payload;
+
+        // find which tour has the event being updated
+        const tour = state.tours.find(
+          (element) => element._id === updatedEvent.tour
+        );
+        // find which event is being updated
+        const event = tour.events.find((element) => element._id === eventId);
+        event.venue = updatedVenue;
+        event.date = updatedEvent.date;
+        event.doors = updatedEvent.doors;
+        event.setLength = updatedEvent.setLength;
+        state.status = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(updateEventThunk.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload.status;
+      })
+      .addCase(updateLineupArtistThunk.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(updateLineupArtistThunk.fulfilled, (state, action) => {
+        const { eventId, tourId, updatedArtist } = action.payload;
+        // find which tour has the event being updated
+        const tour = state.tours.find((element) => element._id === tourId);
+        // find which event is being updated
+        const event = tour.events.find((element) => element._id === eventId);
+        // find which artist in event.lineup is being updated
+        const artist = event.lineup.find(
+          (element) => element._id === updatedArtist._id
+        );
+        artist.name = updatedArtist.name;
+        artist.contact = updatedArtist.contact;
+        artist.email = updatedArtist.email;
+        artist.handle = updatedArtist.handle;
+        artist.phone = updatedArtist.phone;
+        state.status = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(updateLineupArtistThunk.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.payload.status;
       });

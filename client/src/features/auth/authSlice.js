@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from "axios";
-const base_URL = "http://localhost:3000"
+import axios from 'axios';
+
+// const base_URL = 'http://localhost:3000';
 
 const initialState = {
-  //use localStorage.getItem("token") || "" for authenticated property once auth is setup
-  authenticated: "",
+  // use localStorage.getItem("token") || "" for authenticated property once auth is setup
+  authenticated: '',
   email: null,
   firstName: null,
-  lastName: null
-}
+  lastName: null,
+};
 
 // export const signIn = createAsyncThunk(
 //   'auth/signIn',
@@ -28,23 +29,25 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signOut(state){
-      return {...state,
-        authenticated: "",
+    signOut(state) {
+      return {
+        ...state,
+        authenticated: '',
         email: null,
         firstName: null,
-        lastName: null
-      }
+        lastName: null,
+      };
     },
     signIn(state, action) {
       const { authenticated } = action.payload;
-      return  {...state,
-        authenticated: authenticated,
+      return {
+        ...state,
+        authenticated,
         email: 'cliff@gmail.com',
         firstName: 'Cliff',
-        lastName: 'Jameson'
-      }
-    }
+        lastName: 'Jameson',
+      };
+    },
   },
   // extraReducers: (builder) => {
   //   builder
@@ -62,6 +65,6 @@ export const authSlice = createSlice({
   //     state.error = action.error.message
   //   })
   // }
-})
-export const { signOut, signIn } = authSlice.actions
+});
+export const { signOut, signIn } = authSlice.actions;
 export default authSlice.reducer;

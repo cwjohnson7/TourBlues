@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
@@ -10,32 +10,36 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 // import LineupForm from './lineup-form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import STATES from '../../utilities/states';
-import { addEventThunk, getVenueQueryThunk } from './event-formSlice';
+import { updateEventThunk, getVenueQueryThunk } from './event-formSlice';
 
-const initialValues = {
-  venueName: '',
-  date: '',
-  doors: '',
-  setLength: '',
-  contact: '',
-  phone: '',
-  email: '',
-  address: '',
-  city: '',
-  state: '',
-  zip: '',
-  artistId: '64f92397aa11269c12b9c746',
-};
-
-function EventUpdate({ tourId, eventId, venueId, event }) {
+function EventUpdate({ tourId, eventId, venueId }) {
   const dispatch = useDispatch();
   const venues = useSelector((state) => state.eventForm.venues);
+  const tours = useSelector((state) => state.homePage.tours);
+  const tour = tours.find((element) => element._id === tourId);
+  const event = tour.events.find((element) => element._id === eventId);
+  const initialValues = {
+    newVenueName: event.venue.name,
+    newDate: event.date,
+    newDoors: event.doors,
+    newSetLength: event.setLength,
+    newContact: event.venue.contact,
+    newPhone: event.venue.phone,
+    newEmail: event.venue.email,
+    newAddress: event.venue.address,
+    newCity: event.venue.city,
+    newState: event.venue.state,
+    newZip: event.venue.zip,
+    artistId: '64f92397aa11269c12b9c746',
+  };
+
   const [values, setValues] = useState(initialValues);
   const [query, setQuery] = useState('');
   const [show, setShow] = useState(false);
   values.tourId = tourId;
   values.eventId = eventId;
   values.venueId = venueId;
+  useEffect(() => {}, [dispatch, tour.events]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleQuery = (e) => {
@@ -52,10 +56,13 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
     });
   };
 
-  const handleSubmitClick = () => {
-    console.log('values from form component: ', values);
-    dispatch(addEventThunk(values));
+  const handleCloseClick = () => {
     setValues(initialValues);
+    handleClose();
+  };
+
+  const handleSubmitClick = () => {
+    dispatch(updateEventThunk(values));
     handleClose();
   };
 
@@ -98,9 +105,9 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
       {/* </Card.Body>
       </EventCard> */}
       {/* </Container> */}
-      <Offcanvas show={show} onHide={handleClose} backdrop="static">
+      <Offcanvas show={show} onHide={handleCloseClick} backdrop="static">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Event Form</Offcanvas.Title>
+          <Offcanvas.Title>Update Event</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form>
@@ -135,8 +142,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Venue</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.venueName}
-                  name="venueName"
+                  value={values.newVenueName}
+                  name="newVenueName"
                   onChange={handleInput}
                   placeholder="Venue name"
                 />
@@ -148,8 +155,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.date}
-                  name="date"
+                  value={values.newDate}
+                  name="newDate"
                   onChange={handleInput}
                   placeholder="DD/MM/YYYY"
                 />
@@ -160,8 +167,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Doors Time</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.doors}
-                  name="doors"
+                  value={values.newDoors}
+                  name="newDoors"
                   onChange={handleInput}
                   placeholder=""
                 />
@@ -170,8 +177,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Set Length</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.setLength}
-                  name="setLength"
+                  value={values.newSetLength}
+                  name="newSetLength"
                   onChange={handleInput}
                   placeholder="Enter set length"
                 />
@@ -182,8 +189,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Venue Contact (Optional)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.contact}
-                  name="contact"
+                  value={values.newContact}
+                  name="newContact"
                   onChange={handleInput}
                   placeholder="Enter contact name at venue"
                 />
@@ -195,8 +202,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Phone (Optional)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.phone}
-                  name="phone"
+                  value={values.newPhone}
+                  name="newPhone"
                   onChange={handleInput}
                   placeholder="Phone number (ex. 999-999-9999)"
                 />
@@ -208,8 +215,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Email (Optional)</Form.Label>
                 <Form.Control
                   type="email"
-                  value={values.email}
-                  name="email"
+                  value={values.newEmail}
+                  name="newEmail"
                   onChange={handleInput}
                   placeholder="Venue email"
                 />
@@ -220,8 +227,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
               <Form.Label>Venue Address</Form.Label>
               <Form.Control
                 type="text"
-                value={values.address}
-                name="address"
+                value={values.newAddress}
+                name="newAddress"
                 onChange={handleInput}
                 placeholder="1234 Main St"
               />
@@ -232,8 +239,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>City</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.city}
-                  name="city"
+                  value={values.newCity}
+                  name="newCity"
                   onChange={handleInput}
                   placeholder="City"
                 />
@@ -243,8 +250,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>State</Form.Label>
                 <Form.Select
                   aria-label="Choose..."
-                  value={values.state}
-                  name="state"
+                  value={values.newState}
+                  name="newState"
                   onChange={handleInput}
                 >
                   <option>Choose...</option>
@@ -261,8 +268,8 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
                 <Form.Label>Zip</Form.Label>
                 <Form.Control
                   type="text"
-                  value={values.zip}
-                  name="zip"
+                  value={values.newZip}
+                  name="newZip"
                   onChange={handleInput}
                   placeholder="Zip"
                 />
@@ -275,7 +282,7 @@ function EventUpdate({ tourId, eventId, venueId, event }) {
             </Col> */}
             </Row>
             <Button variant="primary" type="button" onClick={handleSubmitClick}>
-              Add Event
+              Update Event
             </Button>
           </Form>
         </Offcanvas.Body>
@@ -301,5 +308,4 @@ EventUpdate.propTypes = {
   tourId: PropTypes.string.isRequired,
   eventId: PropTypes.string.isRequired,
   venueId: PropTypes.string.isRequired,
-  event: PropTypes.object.isRequired,
 };

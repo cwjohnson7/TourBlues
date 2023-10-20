@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import ListGroup from 'react-bootstrap/ListGroup';
 import LineupForm from '../event/lineup-form';
+import LineupUpdate from '../event/lineup-update';
 import EventForm from '../event/event-form';
 
 import EventUpdate from '../event/event-update';
@@ -36,10 +37,6 @@ function TourView() {
     navigate('/homepage');
   };
 
-  const testFunc = () => {
-    console.log('hello');
-  };
-
   const renderEventsList = () => {
     if (events) {
       return events.map((event) => (
@@ -60,7 +57,14 @@ function TourView() {
                 <ListGroup>
                   {event.lineup.map((artist) => (
                     <ListGroupItem>
-                      {artist.name} ({artist.handle})
+                      <InlineItems>
+                        {artist.name} ({artist.handle})
+                      </InlineItems>
+                      <LineupUpdate
+                        artistId={artist._id}
+                        tourId={pathId}
+                        eventId={event._id}
+                      />
                     </ListGroupItem>
                   ))}
                 </ListGroup>
@@ -84,6 +88,7 @@ function TourView() {
                   eventId={event._id}
                   venueId={event.venue._id}
                   event={event}
+                  venue={event.venue}
                 />
               </Col>
               <Col xs="auto">
@@ -165,6 +170,10 @@ const HomePageButton = styled(Button)`
 
 const EventViewContainer = styled(Container)`
   margin-top: 20px;
+`;
+
+const InlineItems = styled.div`
+  display: inline-block;
 `;
 // const HeaderButton = styled(Col)`
 // justify-content: right;

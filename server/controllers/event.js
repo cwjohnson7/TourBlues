@@ -131,25 +131,49 @@ exports.updateEvent = async (req, res) => {
     newEmail,
     eventId,
     venueId,
+    artistId
   } = req.body;
   const id = eventId;
   const updatedEvent = await Event.findById(id);
   const updatedVenue = await Venue.findById(venueId);
   console.log(updatedEvent);
-  updatedEvent.date = newDate;
-  updatedEvent.doors = newDoors;
-  updatedEvent.setLength = newSetLength;
-  updatedVenue.name = newVenueName;
-  updatedVenue.address = newAddress;
-  updatedVenue.city = newCity;
-  updatedVenue.state = newState;
-  updatedVenue.zip = newZip;
-  updatedVenue.contact = newContact;
-  updatedVenue.phone = newPhone;
-  updatedVenue.email = newEmail;
-
+  // if(newDate) {
+    updatedEvent.date = newDate;
+  // }
+  // if (newDoors) {
+    updatedEvent.doors = newDoors;
+  // }
+  // if (newSetLength) {
+    updatedEvent.setLength = newSetLength;
+  // }
+  // if (newVenueName) {
+    updatedVenue.name = newVenueName;
+  // }
+  // if (newAddress) {
+    updatedVenue.address = newAddress;
+  // }
+  // if (newCity) {
+    updatedVenue.city = newCity;
+  // }
+  // if (newState) {
+    updatedVenue.state = newState;
+  // }
+  // if (newZip) {
+    updatedVenue.zip = newZip;
+  // }
+  // if (newContact) {
+    updatedVenue.contact = newContact;
+  // }
+  // if (newPhone) {
+    updatedVenue.phone = newPhone;
+  // }
+  // if (newEmail) {
+    updatedVenue.email = newEmail;
+  // }
+  
   await updatedEvent.save();
-  res.status(200).send({ updatedEvent, updatedVenue });
+  await updatedVenue.save();
+  res.status(200).send({ artistId, eventId, venueId, updatedEvent, updatedVenue });
 };
 
 exports.removeEvent = async (req, res) => {

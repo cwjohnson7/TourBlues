@@ -63,17 +63,17 @@ exports.getArtistById = async (req, res) => {
 
 // need to test this route
 exports.updateArtist = async (req, res) => {
-  const { artistId, name, contact, email, handle, phone } = req.body;
+  const { artistId, eventId, tourId, newName, newContact, newEmail, newHandle, newPhone } = req.body;
 
   const updatedArtist = await Artist.findById(artistId);
-  updatedArtist.name = name;
-  updatedArtist.contact = contact;
-  updatedArtist.email = email;
-  updatedArtist.handle = handle;
-  updatedArtist.phone = phone;
+  updatedArtist.name = newName;
+  updatedArtist.contact = newContact;
+  updatedArtist.email = newEmail;
+  updatedArtist.handle = newHandle;
+  updatedArtist.phone = newPhone;
   await updatedArtist.save();
 
-  res.status(200).send({ updatedArtist, artistId });
+  res.status(200).send({ updatedArtist, eventId, tourId, artistId });
 };
 
 exports.removeArtist = async (req, res) => {

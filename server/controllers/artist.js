@@ -85,7 +85,7 @@ exports.removeArtist = async (req, res) => {
 };
 
 exports.removeLineupArtist = async (req, res) => {
-  const { artistId, eventId } = req.body;
+  const { artistId, tourId, eventId } = req.body;
 
   const removedLineupArtist = await Artist.findById(artistId);
   const event = await Event.findById(eventId);
@@ -94,7 +94,7 @@ exports.removeLineupArtist = async (req, res) => {
   event.lineup.splice(artistIndex, 1);
   await event.save();
 
-  res.status(200).send({ removedLineupArtist, event });
+  res.status(200).send({ removedLineupArtist, tourId, eventId });
 };
 
 exports.getArtist = async (req, res) => {

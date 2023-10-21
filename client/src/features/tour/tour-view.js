@@ -16,6 +16,8 @@ import LineupUpdate from '../event/lineup-update';
 import EventForm from '../event/event-form';
 
 import EventUpdate from '../event/event-update';
+import EventDelete from '../event/event-delete';
+import LineupDelete from '../event/lineup-delete';
 
 function TourView() {
   const dispatch = useDispatch();
@@ -25,23 +27,23 @@ function TourView() {
   const path = matchPath('/tours/:tourId', location.pathname);
   const pathId = path.params.tourId;
   const tour = tours.find((element) => element._id === pathId);
+
   const { events } = tour;
   const tourName = tour.name;
   useEffect(() => {}, [dispatch, tour.events]);
-  console.log('events ref: ', events);
+  console.log('tour-view events: ', events);
 
-  const handleViewEvent = () => {
-    navigate('/homepage');
-  };
   const handleHomePageClick = () => {
     navigate('/homepage');
   };
 
   const renderEventsList = () => {
     if (events) {
-      return events.map((event) => (
+      return events.map((event, index) => (
         <Accordion.Item key={event._id} eventKey={event._id}>
-          <Accordion.Header> {event.venue.name}</Accordion.Header>
+          <Accordion.Header>
+            {event.venue.name}, Index: {index}
+          </Accordion.Header>
           <Accordion.Body>
             <Row>
               <Col>
@@ -60,6 +62,11 @@ function TourView() {
                       <InlineItems>
                         {artist.name} ({artist.handle})
                       </InlineItems>
+                      <LineupDelete
+                        artistId={artist._id}
+                        tourId={pathId}
+                        eventId={event._id}
+                      />
                       <LineupUpdate
                         artistId={artist._id}
                         tourId={pathId}
@@ -92,13 +99,7 @@ function TourView() {
                 />
               </Col>
               <Col xs="auto">
-                <Button
-                  id={tour._id}
-                  variant="danger"
-                  onClick={handleViewEvent}
-                >
-                  Delete Event
-                </Button>
+                <EventDelete eventId={event._id} tourId={pathId} />
               </Col>
             </Row>
           </Accordion.Body>

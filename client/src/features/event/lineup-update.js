@@ -52,7 +52,7 @@ function LineupUpdate({ artistId, tourId, eventId }) {
 
   return (
     <>
-      <LineupButton variant="primary" size="sm" onClick={handleShow}>
+      <LineupButton variant="outline-primary" size="sm" onClick={handleShow}>
         Edit
       </LineupButton>
 

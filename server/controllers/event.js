@@ -178,11 +178,15 @@ exports.updateEvent = async (req, res) => {
 
 exports.removeEvent = async (req, res) => {
   const { eventId } = req.body;
+  console.log(' removeEvent req.body: ', req.body);
   const id = eventId;
   // const removedEvent = await Event.findByIdAndDelete(id);
-  const removedEvent = await Event.findById(eventId);
+  const removedEvent = await Event.findById(id);
+  console.log('removedEvent: ', removedEvent);
   const artistRef = await Artist.findById(removedEvent.artist);
+  console.log('artistRef: ', artistRef);
   const tourRef = await Tour.findById(removedEvent.tour);
+  console.log('tourRef: ', tourRef);
   await Event.findByIdAndDelete(eventId);
 
   const eventIndexForArtist = artistRef.events.indexOf(eventId);
@@ -194,5 +198,5 @@ exports.removeEvent = async (req, res) => {
   await artistRef.save();
   await tourRef.save();
 
-  res.status(200).send({ removedEvent, artistRef, tourRef });
+  res.status(200).send({ eventId, removedEvent, artistRef, tourRef });
 };

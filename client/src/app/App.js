@@ -16,7 +16,6 @@ function App() {
           <Route path="/" element={<LogIn />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/homepage" element={<HomePage />} />
-          {/* /tours will be tours/:tourId once sample data is made */}
           <Route path="/tours/:tourId" element={<TourView />} />
         </Routes>
       </BrowserRouter>

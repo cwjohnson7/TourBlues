@@ -46,7 +46,7 @@ function LineupUpdate({ artistId, tourId, eventId }) {
   };
   const handleSubmitClick = () => {
     dispatch(updateLineupArtistThunk(values));
-    setValues(initialValues);
+    // setValues(initialValues);
     handleClose();
   };
 

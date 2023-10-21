@@ -1,11 +1,15 @@
 import { styled } from 'styled-components';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
 
 function Navigation() {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -15,45 +19,57 @@ function Navigation() {
 
   const navigate = useNavigate();
 
-  function handleReturnHome() {
+  const handleReturnHome = () => {
     if (authenticated) {
       navigate('/homepage');
     } else {
       navigate('/');
     }
-  }
+  };
 
-  function handleSignOut() {
+  const handleSignOut = () => {
     // dispatch signOut action
     // setUser('not authenticated');
     navigate('/');
-  }
+  };
 
-  const renderSignOut = () => {
+  const navButtons = () => {
+    if (authenticated) {
+      return (
+        <Form inline>
+          <Row>
+            <Col xs="auto">
+              <HomeButton
+                variant="link"
+                type="button"
+                onClick={handleReturnHome}
+              >
+                Home
+              </HomeButton>
+            </Col>
+            <Col xs="auto">
+              <SignOutButton
+                variant="link"
+                type="button"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </SignOutButton>
+            </Col>
+          </Row>
+        </Form>
+      );
+    }
+  };
+
+  const renderLinks = () => {
     /* verify if user is authenticated */
     if (authenticated === 'authenticated') {
       console.log('authenticated in renderSignOut');
       return (
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/homepage" onClick={handleReturnHome}>
-              Home
-            </Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="/" onClick={handleSignOut}>
-              Sign out
-            </Nav.Link>
+            <Nav.Item>{navButtons()}</Nav.Item>
           </Nav>
         </Navbar.Collapse>
       );
@@ -66,10 +82,18 @@ function Navigation() {
       <Container>
         <Navbar.Brand onClick={handleReturnHome}>TourBlues</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        {renderSignOut()}
+        {renderLinks()}
       </Container>
     </Navbar>
   );
 }
 
 export default Navigation;
+
+const HomeButton = styled(Button)`
+  margin-left: 5px;
+`;
+
+const SignOutButton = styled(Button)`
+  margin-left: 5px;
+`;

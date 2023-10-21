@@ -80,6 +80,43 @@ export const addTourThunk = createAsyncThunk(
   }
 );
 
+export const updateTourThunk = createAsyncThunk(
+  'homePage/updateTourThunk',
+  async (data, thunkAPI) => {
+    try {
+      const apiEndpoint = '/api/updateTour';
+      const response = await axios.put(baseURL + apiEndpoint, data);
+      console.log('updateTourThunk data: ', data);
+
+      console.log('response.data from thunk: ', response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error.response?.data?.message || error.message,
+        status: error.response?.status,
+      });
+    }
+  }
+);
+
+export const deleteTourThunk = createAsyncThunk(
+  'homePage/deleteTourThunk',
+  async ({ data }, thunkAPI) => {
+    try {
+      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+      const apiEndpoint = '/api/removeTour';
+      console.log('data for removing lineup artist: ', data);
+      const response = await axios.delete(baseURL + apiEndpoint, { data });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error.response?.data?.message || error.message,
+        status: error.response?.status,
+      });
+    }
+  }
+);
+
 export const addLineupArtistThunk = createAsyncThunk(
   'homePage/addLineupArtistThunk',
   async (data, thunkAPI) => {
@@ -180,6 +217,41 @@ export const homePageSlice = createSlice({
         state.error = null;
       })
       .addCase(addTourThunk.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload;
+      })
+      .addCase(updateTourThunk.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(updateTourThunk.fulfilled, (state, action) => {
+        const { updatedTour } = action.payload;
+        const tour = state.tours.find(
+          (element) => element._id === updatedTour._id
+        );
+        tour.name = updatedTour.name;
+        state.status = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(updateTourThunk.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload;
+      })
+      .addCase(deleteTourThunk.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(deleteTourThunk.fulfilled, (state, action) => {
+        const { removedTour, artistRef } = action.payload;
+        const tour = state.tours.find(
+          (element) => element._id === removedTour._id
+        );
+        const tourIndex = state.tours.indexOf(tour);
+        state.tours.splice(tourIndex, 1);
+        state.status = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(deleteTourThunk.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.payload;
       })

@@ -41,11 +41,12 @@ exports.getUserTours = async (req, res) => {
 };
 
 exports.updateTour = async (req, res) => {
-  const { updatedName, tourId } = req.body;
+  const { newName, tourId } = req.body;
   const id = tourId;
   const updatedTour = await Tour.findById(id);
-  updatedTour.name = updatedName;
+  updatedTour.name = newName;
   await updatedTour.save();
+  console.log('updated tour in object: ', { updatedTour });
   res.status(200).send({ updatedTour });
 };
 

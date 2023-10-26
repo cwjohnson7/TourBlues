@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const MerchSchema = new Schema({
   name: String,
   unitCost: Number,
   unitPrice: Number,
   qty: Number,
-  artist: { type: Schema.Types.ObjectId, ref: 'artist' }
-})
+  artist: { type: Schema.Types.ObjectId, ref: 'artist' },
+});
 
 module.exports = mongoose.model('merch', MerchSchema);

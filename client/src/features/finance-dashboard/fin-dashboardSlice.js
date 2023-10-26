@@ -1,18 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  finances: []
-}
+  finances: [],
+};
 
 export const finDashboardSlice = createSlice({
   name: 'eventForm',
   initialState,
   reducers: {
-    findDashCase: () => {
-      return initialState;
-    }
-  }
-
-})
+    findDashCase: () => initialState,
+  },
+});
 
 export default finDashboardSlice.reducer;

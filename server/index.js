@@ -1,12 +1,12 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
+
 const app = express();
 const axios = require('axios');
-const router = require('./routes/router');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const router = require('./routes/router');
 
 mongoose.connect('mongodb://127.0.0.1:27017/tourblues', {
   useNewUrlParser: true,

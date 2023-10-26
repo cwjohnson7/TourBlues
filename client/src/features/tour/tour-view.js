@@ -31,7 +31,6 @@ function TourView() {
   const { events } = tour;
   const tourName = tour.name;
   useEffect(() => {}, [dispatch, tour.events]);
-  console.log('tour-view events: ', events);
 
   const handleHomePageClick = () => {
     navigate('/homepage');
@@ -39,11 +38,9 @@ function TourView() {
 
   const renderEventsList = () => {
     if (events) {
-      return events.map((event, index) => (
+      return events.map((event) => (
         <Accordion.Item key={event._id} eventKey={event._id}>
-          <Accordion.Header>
-            {event.venue.name}, Index: {index}
-          </Accordion.Header>
+          <Accordion.Header>{event.venue.name}</Accordion.Header>
           <Accordion.Body>
             <Row>
               <Col>
@@ -134,7 +131,6 @@ function TourView() {
   return (
     <EventViewContainer>
       <h3>{tourName}</h3>
-      {/* <h5>Events: </h5> */}
       <Row>
         <Col>
           <Accordion>
@@ -151,30 +147,6 @@ function TourView() {
                 </Row>
               </Card.Header>
               {renderEventsList()}
-              {/* <Accordion.Item eventKey="0">
-        <Accordion.Header>Tour Date One</Accordion.Header>
-        <Accordion.Body>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1">
-        <Accordion.Header>Tour Date 2</Accordion.Header>
-        <Accordion.Body>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </Accordion.Body>
-      </Accordion.Item> */}
             </Card>
           </Accordion>
         </Col>
@@ -199,6 +171,3 @@ const EventViewContainer = styled(Container)`
 const InlineItems = styled.div`
   display: inline-block;
 `;
-// const HeaderButton = styled(Col)`
-// justify-content: right;
-// `

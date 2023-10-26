@@ -6,9 +6,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/esm/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, matchPath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import FinanceDashboard from '../finance-dashboard/fin-dashboard';
+
 import TourForm from '../tour/tour-form';
 import TourUpdate from '../tour/tour-update';
 import { getUserToursThunk } from './HomePageSlice';
@@ -19,11 +19,6 @@ function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const tours = useSelector((state) => state.homePage.tours);
-  // const location = useLocation();
-  // const path = matchPath("/tours/:tourId", location.pathname);
-  // const pathId = path.params.tourId;
-  // const tour = tours.find(tour => tour._id === pathId);
-  // const artistId = '64f92397aa11269c12b9c746';
 
   useEffect(() => {
     dispatch(getUserToursThunk({ token }));
@@ -31,7 +26,6 @@ function HomePage() {
 
   const handleTourViewClick = (e) => {
     const tourId = e.currentTarget.id;
-    // console.log('e.currentTarget.id ', e.currentTarget.id)
     navigate(`/tours/${tourId}`);
   };
   const renderTourList = () => {
@@ -76,17 +70,11 @@ function HomePage() {
     <Container>
       <Container display="flex">
         <Row className="justify-content-md-center">
-          <CardCol md={4}>
-            <ActionsContainer />
+          <CardCol md={3} />
+          <CardCol md={6}>
+            <TourForm />
           </CardCol>
-          <CardCol md={4}>
-            <ActionsContainer>
-              <TourForm />
-            </ActionsContainer>
-          </CardCol>
-          <CardCol md={4}>
-            <ActionsContainer />
-          </CardCol>
+          <CardCol md={3} />
         </Row>
       </Container>
       <Row className="justify-content-md-center">
@@ -106,11 +94,6 @@ function HomePage() {
 }
 
 export default HomePage;
-
-const ActionsContainer = styled(Container)`
-  margin-top: 8%;
-  margin-bottom: 8%;
-`;
 
 const CardCol = styled(Col)`
   justify-content: center;

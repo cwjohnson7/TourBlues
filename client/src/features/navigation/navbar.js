@@ -6,19 +6,17 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import { signOut } from '../auth/authSlice';
 
 const Navigation = () => {
   const authenticated = useSelector((state) => state.auth.authenticated);
   const artistName = useSelector((state) => state.auth.artistName);
-
-  console.log('token from NavBar: ', authenticated);
+  const dispatch = useDispatch();
   useEffect(() => {}, [authenticated]);
-
-  // setUser(true);
 
   const navigate = useNavigate();
 
@@ -31,8 +29,7 @@ const Navigation = () => {
   };
 
   const handleSignOut = () => {
-    // dispatch signOut action
-    // setUser('not authenticated');
+    dispatch(signOut());
     navigate('/');
   };
 

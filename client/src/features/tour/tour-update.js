@@ -43,19 +43,9 @@ const TourUpdate = ({ tourId }) => {
 
   return (
     <>
-      {/* <TourCard>
-        <Card.Img variant="top" src="holder.js/100px180" />
-        <Card.Body>
-          <Card.Title>Update Tour</Card.Title>
-          <Card.Text>
-            Kickoff your tour with the initial details here!
-          </Card.Text> */}
       <Button variant="warning" onClick={handleShow}>
         Update Tour
       </Button>
-      {/* </Card.Body>
-      </TourCard> */}
-
       <Modal show={show} onHide={handleCloseClick}>
         <Modal.Header closeButton>
           <Modal.Title>Update Tour</Modal.Title>
@@ -91,12 +81,6 @@ const TourUpdate = ({ tourId }) => {
 };
 
 export default TourUpdate;
-
-// const TourCard = styled(Card)`
-//   height: 200px;
-//   margin-left: 20px;
-//   margin-right: 20px;
-// `;
 
 TourUpdate.propTypes = {
   tourId: PropTypes.string.isRequired,

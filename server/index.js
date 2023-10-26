@@ -1,14 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
 
 const app = express();
 const axios = require('axios');
+const router = require('./routes/router');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const router = require('./routes/router');
+const keys = require('./config/keys');
 
-mongoose.connect('mongodb://127.0.0.1:27017/tourblues', {
+mongoose.connect(keys.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

@@ -16,9 +16,7 @@ export const getVenueQueryThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = `/api/fetchVenues/${data.query}`;
-      console.log('data param: ', data);
       const response = await axios.get(baseURL + apiEndpoint, config);
-      console.log('axios response: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -57,9 +55,6 @@ export const addEventThunk = createAsyncThunk(
         : {};
       const apiEndpoint = '/api/addEvent';
       const response = await axios.post(baseURL + apiEndpoint, data, config);
-      console.log('just data: ', data);
-      // const response = data;
-      console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -79,9 +74,6 @@ export const updateEventThunk = createAsyncThunk(
         : {};
       const apiEndpoint = '/api/updateEvent';
       const response = await axios.put(baseURL + apiEndpoint, data, config);
-      console.log('just update data: ', data);
-      // const response = data;
-      console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -119,10 +111,7 @@ export const eventFormSlice = createSlice({
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(addEventThunk.fulfilled, (state, action) => {
-        console.log('event results: ', action.payload);
-
-        // state.events = action.payload;
+      .addCase(addEventThunk.fulfilled, (state) => {
         state.status = 'fulfilled';
         state.error = null;
       })

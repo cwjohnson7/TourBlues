@@ -15,7 +15,6 @@ function tokenForUser(user) {
 }
 
 exports.signUp = async (req, res) => {
-  // req.body.artist is the artist name entered on the sign-up form
   const {
     email,
     password,
@@ -25,8 +24,6 @@ exports.signUp = async (req, res) => {
     handle,
     artistName,
   } = req.body;
-
-  console.log('sign UP req.body: ', req.body);
 
   if (!email || !password) {
     return res
@@ -66,7 +63,6 @@ exports.signUp = async (req, res) => {
         user.save().then(() => {
           res.status(200).json({ token: tokenForUser(user), user });
         });
-        console.log('NewArtist: ', newArtist);
       } else {
         const user = new User({
           email: req.body.email,
@@ -76,7 +72,6 @@ exports.signUp = async (req, res) => {
           artistName: existingArtist.name,
         });
         const artistName = existingArtist.name;
-        console.log('existing Artist: ', artistName);
         user.setPassword(password);
         user.save().then(() => {
           res.status(200).json({ token: tokenForUser(user), user });
@@ -88,7 +83,6 @@ exports.signUp = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   const { user } = req;
-  console.log('signIn req.user: ', user);
   const id = req.user.artistId;
   const artist = await Artist.findById(id);
 
@@ -101,7 +95,7 @@ exports.signIn = async (req, res) => {
 exports.currentUser = async (req, res) => {
   const { user } = req;
   const id = user.artistId;
-  console.log('req.user: ', req.user);
+  
   const artist = await Artist.findById(id);
   res.status(200).send({
     token: tokenForUser(user),

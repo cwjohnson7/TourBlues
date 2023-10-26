@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 const initialState = {
   authenticated: localStorage.getItem('token') || '',
@@ -16,7 +17,7 @@ export const signUp = createAsyncThunk(
     try {
       const apiEndpoint = '/api/signUp';
 
-      const response = await axios.post(baseUrl + apiEndpoint, data);
+      const response = await axios.post(baseURL + apiEndpoint, data);
       localStorage.setItem('token', response.data.token);
       callback();
       return response.data;
@@ -35,7 +36,7 @@ export const signIn = createAsyncThunk(
     try {
       const apiEndpoint = '/api/signIn';
 
-      const response = await axios.post(baseUrl + apiEndpoint, data);
+      const response = await axios.post(baseURL + apiEndpoint, data);
       callback();
       localStorage.setItem('token', response.data.token);
       return response.data;
@@ -56,7 +57,7 @@ export const authUser = createAsyncThunk('auth/authUser', async (thunkAPI) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     };
-    const response = await axios.get(baseUrl + apiEndpoint, config);
+    const response = await axios.get(baseURL + apiEndpoint, config);
     localStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error) {

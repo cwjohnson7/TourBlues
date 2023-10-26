@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const baseURL = 'http://localhost:8000';
+// const baseURL = 'http://localhost:8000';
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 const initialState = {
   events: [],

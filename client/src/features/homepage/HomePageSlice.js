@@ -2,7 +2,8 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addEventThunk, updateEventThunk } from '../event/event-formSlice';
 
-const baseURL = 'http://localhost:8000';
+// const baseURL = 'http://localhost:8000';
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 const initialState = {
   tours: [],
@@ -10,13 +11,12 @@ const initialState = {
 // good
 export const getUserToursThunk = createAsyncThunk(
   'homePage/getUserToursThunk',
-  async ({ data, token }, thunkAPI) => {
+  async ({ token }, thunkAPI) => {
     try {
       const config = token
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = `/api/getUserTours`;
-      console.log('data param: ', data);
       const response = await axios.get(baseURL + apiEndpoint, config);
       return response.data;
     } catch (error) {
@@ -36,7 +36,6 @@ export const getEventsThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = `/api/getEvents/${data.tourId}`;
-      console.log('data param: ', data);
       const response = await axios.get(baseURL + apiEndpoint, config);
       return response.data;
     } catch (error) {
@@ -56,7 +55,6 @@ export const deleteEventThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = '/api/removeEvent';
-      console.log('req for removing event: ', { config, data });
       const response = await axios.delete(baseURL + apiEndpoint, {
         ...config,
         data,
@@ -79,9 +77,7 @@ export const addTourThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = '/api/addTour';
-      console.log('req from tour thunk: ', data, config);
       const response = await axios.post(baseURL + apiEndpoint, data, config);
-      console.log('response.data ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -101,8 +97,6 @@ export const updateTourThunk = createAsyncThunk(
         : {};
       const apiEndpoint = '/api/updateTour';
       const response = await axios.put(baseURL + apiEndpoint, data, config);
-
-      console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -121,7 +115,6 @@ export const deleteTourThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = '/api/removeTour';
-      console.log('data for removing lineup artist: ', data);
       const response = await axios.delete(baseURL + apiEndpoint, {
         ...config,
         data,
@@ -145,9 +138,6 @@ export const addLineupArtistThunk = createAsyncThunk(
         : {};
       const apiEndpoint = '/api/addLineupArtist';
       const response = await axios.post(baseURL + apiEndpoint, data, config);
-      console.log('lineupArtistThunk data: ', data);
-      // const response = data;
-      console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -167,8 +157,6 @@ export const updateLineupArtistThunk = createAsyncThunk(
         : {};
       const apiEndpoint = '/api/updateArtist';
       const response = await axios.put(baseURL + apiEndpoint, data, config);
-      console.log('updatelineupArtistThunk data: ', data);
-      console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -187,7 +175,6 @@ export const deleteLineupArtistThunk = createAsyncThunk(
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const apiEndpoint = '/api/removeLineupArtist';
-      console.log('data for removing lineup artist: ', data);
       const response = await axios.delete(baseURL + apiEndpoint, {
         ...config,
         data,
@@ -207,12 +194,6 @@ export const homePageSlice = createSlice({
   initialState,
   reducers: {
     signOut: () => initialState,
-    // removeEvent: (state, action) => {
-    //   const { eventId, tourId } = action.payload;
-    //   const tour = state.tours.find((element) => element._id === tourId);
-    //   const event = tour.events.find((element) => element._id === eventId);
-    //   const eventIndex = tour.events.indexOf(event);
-    // }
   },
   extraReducers: (builder) => {
     builder
@@ -221,7 +202,6 @@ export const homePageSlice = createSlice({
         state.error = null;
       })
       .addCase(getUserToursThunk.fulfilled, (state, action) => {
-        // console.log('action.payload.tours ', action.payload.tours);
         state.tours = action.payload.tours;
         state.status = 'fulfilled';
         state.error = null;
@@ -241,7 +221,6 @@ export const homePageSlice = createSlice({
           name: action.payload.tour.name,
           events: [],
         });
-        // console.log('action.payload.tour: ', action.payload.tour)
         state.status = 'fulfilled';
         state.error = null;
       })
@@ -271,7 +250,7 @@ export const homePageSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteTourThunk.fulfilled, (state, action) => {
-        const { removedTour, artistRef } = action.payload;
+        const { removedTour } = action.payload;
         const tour = state.tours.find(
           (element) => element._id === removedTour._id
         );
@@ -291,11 +270,6 @@ export const homePageSlice = createSlice({
       .addCase(addEventThunk.fulfilled, (state, action) => {
         const { event, lineup, venue, existingVenue, artistId } =
           action.payload;
-        console.log(
-          'homepageSlice/addEventThunk action.payload: ',
-          action.payload
-        );
-        // find specific tour the event is added to
         const tour = state.tours.find((element) => element._id === event.tour);
 
         tour.events.push({
@@ -323,10 +297,6 @@ export const homePageSlice = createSlice({
       .addCase(addLineupArtistThunk.fulfilled, (state, action) => {
         const { lineupArtist, existingArtist, tourId, eventId } =
           action.payload;
-        console.log(
-          'homepageSlice/addEventThunk action.payload: ',
-          action.payload
-        );
         // find specific tour the event is added to
         const tour = state.tours.find((element) => element._id === tourId);
         // find which event's lineup is being added to
@@ -419,12 +389,11 @@ export const homePageSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteEventThunk.fulfilled, (state, action) => {
-        const { eventId, removedEvent, artistRef, tourRef } = action.payload;
+        const { eventId, tourRef } = action.payload;
         // find which tour has the event being removed
         const tour = state.tours.find((element) => element._id === tourRef._id);
         const eventIdArr = tour.events.map((element) => element._id);
         const indexOfEvent = eventIdArr.indexOf(eventId);
-        console.log('indexofEvent: ', indexOfEvent);
         tour.events.splice(indexOfEvent, 1);
         state.status = 'fulfilled';
         state.error = null;

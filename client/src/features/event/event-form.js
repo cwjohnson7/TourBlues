@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import bootstrap from 'bootstrap';
+
 import '../../app/App.css';
 import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
@@ -10,7 +10,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import styled from 'styled-components';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-// import LineupForm from './lineup-form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import STATES from '../../utilities/states';
 import {
@@ -80,7 +79,6 @@ function EventForm({ tourId, itemsPerPage }) {
   };
 
   const handleSubmitClick = () => {
-    console.log('values from form component: ', values);
     dispatch(addEventThunk({ data: values, token }));
     setValues(initialValues);
     handleClose();
@@ -95,12 +93,10 @@ function EventForm({ tourId, itemsPerPage }) {
   const [itemOffset, setItemOffset] = useState(0);
   const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
-  // const itemsPerPage = 4;
+
   useEffect(() => {
     // Fetch items from another resources.
     const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-    console.log('Venue data: ', venues);
     setCurrentItems(venues.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(venues.length / itemsPerPage));
   }, [itemOffset, venues, itemsPerPage]);
@@ -121,20 +117,10 @@ function EventForm({ tourId, itemsPerPage }) {
 
   return (
     <>
-      {/* <Container> */}
-      {/* <EventCard>
-        <Card.Img variant="top" src="holder.js/100px180" />
-        <Card.Body>
-          <Card.Title>Add Events to the Tour</Card.Title>
-          <Card.Text>
-            Enter Venue, Dates and Lineup information to keep track of each event on the tour.
-          </Card.Text> */}
       <Button variant="primary" onClick={handleShow}>
         Add event
       </Button>
-      {/* </Card.Body>
-      </EventCard> */}
-      {/* </Container> */}
+
       <Offcanvas show={show} onHide={handleCloseClick} backdrop="static">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Event Form</Offcanvas.Title>
@@ -321,11 +307,7 @@ function EventForm({ tourId, itemsPerPage }) {
               </Form.Group>
             </Row>
 
-            <Row>
-              {/* <Col xs="auto">
-            <LineupForm />
-            </Col> */}
-            </Row>
+            <Row />
             <Button variant="primary" type="button" onClick={handleSubmitClick}>
               Add Event
             </Button>
@@ -337,12 +319,6 @@ function EventForm({ tourId, itemsPerPage }) {
 }
 
 export default EventForm;
-
-// const EventCard = styled(Card)`
-// margin-left: 20px ;
-// margin-right: 20px ;
-// width: 80%
-// `
 
 const SearchResults = styled(ListGroup)`
   height: 250px;

@@ -23,13 +23,8 @@ const TourForm = () => {
     setTourName(e.target.value);
   };
   const handleSubmitForm = () => {
-    // determine how to define name || artistId can be pulled from authSlice eventually, declared here for now
-    handleClose();
-    console.log('data from submit: ', {
-      data: { name: tourName, artistId },
-      token,
-    });
     dispatch(addTourThunk({ data: { name: tourName, artistId }, token }));
+    handleClose();
   };
 
   return (

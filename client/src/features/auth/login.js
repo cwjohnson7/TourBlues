@@ -41,8 +41,6 @@ const LogIn = () => {
   };
 
   return (
-    // <LoginContainer>
-    // <Container className='justify-content-start'>
     <LoginContainer>
       <h4 className="login-header">Login to TourBlues!</h4>
       <Form onSubmit={handleSubmit(handleFormSubmit)}>

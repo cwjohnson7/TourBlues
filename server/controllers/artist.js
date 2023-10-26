@@ -40,7 +40,7 @@ exports.addLineupArtist = async (req, res) => {
     lineupArtist.events.push(eventId);
     await event.save();
     await lineupArtist.save();
-    // console.log(req.body);
+    
     res.status(200).send({ lineupArtist, tourId, eventId });
   } else {
     existingArtist.tours.push(tourId);
@@ -48,7 +48,7 @@ exports.addLineupArtist = async (req, res) => {
     event.lineup.push(existingArtist._id);
     await existingArtist.save();
     await event.save();
-    // console.log(req.body);
+    
     res.status(200).send({ existingArtist, tourId, eventId });
   }
 };
@@ -61,7 +61,6 @@ exports.getArtistById = async (req, res) => {
   res.status(200).send({ artist });
 };
 
-// need to test this route
 exports.updateArtist = async (req, res) => {
   const { artistId, eventId, tourId, newName, newContact, newEmail, newHandle, newPhone } = req.body;
 

@@ -13,25 +13,28 @@ exports.addVenue = async (req, res) => {
 };
 
 exports.fetchVenues = async (req, res) => {
-  const queryString = req.params.query;
-  console.log('query from params request: ', req.params.query);
-  const searchResults = await client.textSearch({
-    params: {
-      query: queryString,
-      key: keys.GOOGLE_MAPS_API_KEY
-    }
-  });
-  console.log('searchResults: ', searchResults);
-  // const searchResults = Sample.sampleData;
-  const trimmedResults = await searchResults.data.results.map((venue) => {
-    const key = venue.place_id;
-    const name = venue.name;
-    const rating = venue.rating;
-    const address = venue.formatted_address;
-    return { key, name, address, rating };
-
-  })
+  try {
+    const queryString = req.params.query;
+    console.log('query from params request: ', req.params.query);
+    const searchResults = await client.textSearch({
+      params: {
+        query: queryString,
+        key: keys.GOOGLE_MAPS_API_KEY
+      }
+    });
+    console.log('searchResults: ', searchResults);
+    // const searchResults = Sample.sampleData;
+    const trimmedResults = await searchResults.data.results.map((venue) => {
+      const key = venue.place_id;
+      const name = venue.name;
+      const rating = venue.rating;
+      const address = venue.formatted_address;
+      return { key, name, address, rating };
   
-
-  res.status(200).json({ trimmedResults });
+    })
+    res.status(200).json({ trimmedResults });
+    
+  } catch (error) {
+    console.log(error);
+  }
 };

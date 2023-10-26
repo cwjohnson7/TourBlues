@@ -15,7 +15,7 @@ import { getUserToursThunk } from './HomePageSlice';
 import TourDelete from '../tour/tour-delete';
 
 function HomePage() {
-  const { token } = useSelector((state) => state.auth.authenticated);
+  const token = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const tours = useSelector((state) => state.homePage.tours);
@@ -23,11 +23,11 @@ function HomePage() {
   // const path = matchPath("/tours/:tourId", location.pathname);
   // const pathId = path.params.tourId;
   // const tour = tours.find(tour => tour._id === pathId);
-  const artistId = '64f92397aa11269c12b9c746';
+  // const artistId = '64f92397aa11269c12b9c746';
 
   useEffect(() => {
-    dispatch(getUserToursThunk({ artistId }));
-  }, [token, artistId, dispatch]);
+    dispatch(getUserToursThunk({ token }));
+  }, [token, dispatch]);
 
   const handleTourViewClick = (e) => {
     const tourId = e.currentTarget.id;
@@ -77,14 +77,15 @@ function HomePage() {
       <Container display="flex">
         <Row className="justify-content-md-center">
           <CardCol md={4}>
+            <ActionsContainer />
+          </CardCol>
+          <CardCol md={4}>
             <ActionsContainer>
               <TourForm />
             </ActionsContainer>
           </CardCol>
           <CardCol md={4}>
-            <ActionsContainer>
-              <FinanceDashboard />
-            </ActionsContainer>
+            <ActionsContainer />
           </CardCol>
         </Row>
       </Container>

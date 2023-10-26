@@ -7,7 +7,8 @@ import { deleteTourThunk } from '../homepage/HomePageSlice';
 
 const TourDelete = ({ tourId }) => {
   const dispatch = useDispatch();
-  const artistId = '64f92397aa11269c12b9c746';
+  const token = useSelector((state) => state.auth.authenticated);
+  const artistId = useSelector((state) => state.auth.artistId);
   const tours = useSelector((state) => state.homePage.tours);
   const tour = tours.find((element) => element._id === tourId);
 
@@ -22,7 +23,7 @@ const TourDelete = ({ tourId }) => {
         'Events still present. Please remove all events from this tour before deleting the tour.'
       );
     }
-    dispatch(deleteTourThunk({ data: { tourId, artistId } }));
+    dispatch(deleteTourThunk({ data: { tourId, artistId }, token }));
     handleClose();
   };
 

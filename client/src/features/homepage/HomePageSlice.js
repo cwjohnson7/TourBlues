@@ -7,15 +7,17 @@ const baseURL = 'http://localhost:8000';
 const initialState = {
   tours: [],
 };
-
+// good
 export const getUserToursThunk = createAsyncThunk(
   'homePage/getUserToursThunk',
-  async (data, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
-      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
-      const apiEndpoint = `/api/getUserTours/${data.artistId}`;
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
+      const apiEndpoint = `/api/getUserTours`;
       console.log('data param: ', data);
-      const response = await axios.get(baseURL + apiEndpoint);
+      const response = await axios.get(baseURL + apiEndpoint, config);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -25,15 +27,17 @@ export const getUserToursThunk = createAsyncThunk(
     }
   }
 );
-
+// not used
 export const getEventsThunk = createAsyncThunk(
   'homePage/getEventsThunk',
-  async (data, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
-      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = `/api/getEvents/${data.tourId}`;
       console.log('data param: ', data);
-      const response = await axios.get(baseURL + apiEndpoint);
+      const response = await axios.get(baseURL + apiEndpoint, config);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -43,15 +47,20 @@ export const getEventsThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const deleteEventThunk = createAsyncThunk(
   'homePage/deleteEventThunk',
-  async ({ data }, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
-      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/removeEvent';
-      console.log('data for removing event: ', data);
-      const response = await axios.delete(baseURL + apiEndpoint, { data });
+      console.log('req for removing event: ', { config, data });
+      const response = await axios.delete(baseURL + apiEndpoint, {
+        ...config,
+        data,
+      });
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -61,14 +70,17 @@ export const deleteEventThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const addTourThunk = createAsyncThunk(
   'homePage/addTourThunk',
-  async ({ data }, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/addTour';
-      console.log('data param from tour thunk: ', data);
-      const response = await axios.post(baseURL + apiEndpoint, data);
+      console.log('req from tour thunk: ', data, config);
+      const response = await axios.post(baseURL + apiEndpoint, data, config);
       console.log('response.data ', response.data);
       return response.data;
     } catch (error) {
@@ -79,14 +91,16 @@ export const addTourThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const updateTourThunk = createAsyncThunk(
   'homePage/updateTourThunk',
-  async (data, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/updateTour';
-      const response = await axios.put(baseURL + apiEndpoint, data);
-      console.log('updateTourThunk data: ', data);
+      const response = await axios.put(baseURL + apiEndpoint, data, config);
 
       console.log('response.data from thunk: ', response.data);
       return response.data;
@@ -98,15 +112,20 @@ export const updateTourThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const deleteTourThunk = createAsyncThunk(
   'homePage/deleteTourThunk',
-  async ({ data }, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
-      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/removeTour';
       console.log('data for removing lineup artist: ', data);
-      const response = await axios.delete(baseURL + apiEndpoint, { data });
+      const response = await axios.delete(baseURL + apiEndpoint, {
+        ...config,
+        data,
+      });
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({
@@ -116,13 +135,16 @@ export const deleteTourThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const addLineupArtistThunk = createAsyncThunk(
   'homePage/addLineupArtistThunk',
-  async (data, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/addLineupArtist';
-      const response = await axios.post(baseURL + apiEndpoint, data);
+      const response = await axios.post(baseURL + apiEndpoint, data, config);
       console.log('lineupArtistThunk data: ', data);
       // const response = data;
       console.log('response.data from thunk: ', response.data);
@@ -135,15 +157,17 @@ export const addLineupArtistThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const updateLineupArtistThunk = createAsyncThunk(
   'homePage/updateLineupArtistThunk',
-  async (data, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/updateArtist';
-      const response = await axios.put(baseURL + apiEndpoint, data);
+      const response = await axios.put(baseURL + apiEndpoint, data, config);
       console.log('updatelineupArtistThunk data: ', data);
-      // const response = data;
       console.log('response.data from thunk: ', response.data);
       return response.data;
     } catch (error) {
@@ -154,15 +178,20 @@ export const updateLineupArtistThunk = createAsyncThunk(
     }
   }
 );
-
+// good
 export const deleteLineupArtistThunk = createAsyncThunk(
   'homePage/deleteArtistLineupThunk',
-  async ({ data }, thunkAPI) => {
+  async ({ data, token }, thunkAPI) => {
     try {
-      // const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
       const apiEndpoint = '/api/removeLineupArtist';
       console.log('data for removing lineup artist: ', data);
-      const response = await axios.delete(baseURL + apiEndpoint, { data });
+      const response = await axios.delete(baseURL + apiEndpoint, {
+        ...config,
+        data,
+      });
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue({

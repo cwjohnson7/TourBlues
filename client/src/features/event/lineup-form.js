@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import styled from 'styled-components';
 import Col from 'react-bootstrap/Col';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addLineupArtistThunk } from '../homepage/HomePageSlice';
 
 const initialValues = {
@@ -19,7 +19,7 @@ const initialValues = {
 
 function LineupForm({ tourId, eventId }) {
   const dispatch = useDispatch();
-  // const tours = useSelector(state => state.homePage.tours);
+  const token = useSelector((state) => state.auth.authenticated);
   const [values, setValues] = useState(initialValues);
   const [show, setShow] = useState(false);
   values.tourId = tourId;
@@ -36,9 +36,8 @@ function LineupForm({ tourId, eventId }) {
   };
 
   const handleSubmitClick = () => {
-    console.log('values from form component: ', values);
     console.log('values from lineup form: ', values);
-    dispatch(addLineupArtistThunk(values));
+    dispatch(addLineupArtistThunk({ data: values, token }));
     setValues(initialValues);
     handleClose();
   };

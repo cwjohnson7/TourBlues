@@ -1,7 +1,7 @@
+const Authentication = require('../controllers/authentication');
 const passport = require('passport');
 const passportService = require('../services/passport');
 const Artist = require('../controllers/artist');
-const Authentication = require('../controllers/authentication');
 const Event = require('../controllers/event');
 const Venue = require('../controllers/venue');
 const Tour = require('../controllers/tour');
@@ -15,35 +15,35 @@ module.exports = (app) => {
   // tested
   app.post('/api/signup', Authentication.signUp);
   app.post('/api/signin', requireSignin, Authentication.signIn);
-  app.get('/api/current_user', requireAuth, Authentication.currentUser);
+  app.get('/api/currentUser', requireAuth, Authentication.currentUser);
 
   // artist
   // tested
-  app.post('/api/addArtist', Artist.addArtist);
-  app.post('/api/addLineupArtist', Artist.addLineupArtist);
-  app.put('/api/updateArtist', Artist.updateArtist);
-  app.delete('/api/removeArtist', Artist.removeArtist);
-  app.delete('/api/removeLineupArtist', Artist.removeLineupArtist);
-  app.get('/api/getArtist', Artist.getArtist);
-  app.get('/api/getArtistById', Artist.getArtistById);
+  app.post('/api/addArtist', requireAuth, Artist.addArtist);
+  app.post('/api/addLineupArtist', requireAuth, Artist.addLineupArtist);
+  app.put('/api/updateArtist', requireAuth, Artist.updateArtist);
+  app.delete('/api/removeArtist', requireAuth, Artist.removeArtist);
+  app.delete('/api/removeLineupArtist', requireAuth, Artist.removeLineupArtist);
+  app.get('/api/getArtist', requireAuth, Artist.getArtist);
+  app.get('/api/getArtistById', requireAuth, Artist.getArtistById);
 
   // event
   // tested
-  app.post('/api/addEvent', Event.addEvent);
-  app.get('/api/getEvents/:tourId', Event.getEventsByTour);
-  app.get('/api/getEvent/:eventId', Event.getEventById);
-  app.put('/api/updateEvent', Event.updateEvent);
-  app.delete('/api/removeEvent', Event.removeEvent);
+  app.post('/api/addEvent', requireAuth, Event.addEvent);
+  app.get('/api/getEvents/:tourId', requireAuth, Event.getEventsByTour);
+  app.get('/api/getEvent/:eventId', requireAuth, Event.getEventById);
+  app.put('/api/updateEvent', requireAuth, Event.updateEvent);
+  app.delete('/api/removeEvent', requireAuth, Event.removeEvent);
 
   // tour
   // tested
-  app.post('/api/addTour', Tour.addTour);
-  app.get('/api/getUserTours/:artist', Tour.getUserTours);
-  app.put('/api/updateTour', Tour.updateTour);
-  app.delete('/api/removeTour', Tour.removeTour);
+  app.post('/api/addTour', requireAuth, Tour.addTour);
+  app.get('/api/getUserTours', requireAuth, requireAuth,Tour.getUserTours);
+  app.put('/api/updateTour', requireAuth, Tour.updateTour);
+  app.delete('/api/removeTour', requireAuth, Tour.removeTour);
 
   // Google Places API
-  app.get('/api/fetchVenues/:query', Venue.fetchVenues);
+  app.get('/api/fetchVenues/:query', requireAuth, Venue.fetchVenues);
 
   // Square Pay
   app.get('/api/getRevenue', Revenue.getRevenue);

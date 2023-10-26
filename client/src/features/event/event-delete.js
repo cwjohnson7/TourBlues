@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteEventThunk } from '../homepage/HomePageSlice';
 
 function EventDelete({ eventId }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.authenticated);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleSubmitClick = () => {
-    dispatch(deleteEventThunk({ data: { eventId } }));
+    dispatch(deleteEventThunk({ data: { eventId }, token }));
     handleClose();
   };
 

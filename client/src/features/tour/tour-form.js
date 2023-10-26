@@ -11,10 +11,10 @@ import { addTourThunk } from '../homepage/HomePageSlice';
 
 const TourForm = () => {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.authenticated);
+  const artistId = useSelector((state) => state.auth.artistId);
   const [tourName, setTourName] = useState('');
   const [show, setShow] = useState(false);
-  const artistId = '64f92397aa11269c12b9c746';
-  const tours = useSelector((state) => state.homePage.tours);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,16 +25,20 @@ const TourForm = () => {
   const handleSubmitForm = () => {
     // determine how to define name || artistId can be pulled from authSlice eventually, declared here for now
     handleClose();
-    console.log('data from submit: ', { data: { name: tourName, artistId } });
-    dispatch(addTourThunk({ data: { name: tourName, artistId } }));
+    console.log('data from submit: ', {
+      data: { name: tourName, artistId },
+      token,
+    });
+    dispatch(addTourThunk({ data: { name: tourName, artistId }, token }));
   };
 
   return (
     <>
       <TourCard>
-        <Card.Img variant="top" src="holder.js/100px180" />
-        <Card.Body>
+        <Card.Header>
           <Card.Title>Create a Tour</Card.Title>
+        </Card.Header>
+        <Card.Body>
           <Card.Text>
             Kickoff your tour with the initial details here!
           </Card.Text>

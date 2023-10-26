@@ -18,13 +18,12 @@ exports.signUp = async (req, res) => {
   // req.body.artist is the artist name entered on the sign-up form
   const {
     email,
-    bandEmail,
     password,
     firstName,
     lastName,
     phone,
     handle,
-    artist,
+    artistName,
   } = req.body;
 
   console.log('sign UP req.body: ', req.body);
@@ -37,35 +36,35 @@ exports.signUp = async (req, res) => {
 
   User.findOne({ email }).then((err, result) => {
     if (err) {
-      // return next(err);
+      return next(err);
     }
     // If a user with email does exist, return an error
     if (result) {
       return res.status(422).send({ error: 'Email is in use' });
     }
 
-    Artist.findOne({ name: artist }).then((existingArtist) => {
+    Artist.findOne({ name: artistName }).then((existingArtist) => {
       if (!existingArtist) {
         const newArtist = new Artist({
-          name: req.body.artist,
-          email: req.body.artistEmail || req.body.email,
+          name: artistName,
+          email: email,
           contact: `${req.body.firstName} ${req.body.lastName}`,
-          phone: req.body.phone || '',
-          handle: req.body.handle || '',
+          phone: phone || '',
+          handle: handle || '',
         });
         newArtist.save();
 
         const user = new User({
-          email: req.body.email,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
           artistId: newArtist._id,
           artistName: newArtist.name,
         });
 
         user.setPassword(password);
         user.save().then(() => {
-          res.status(200).json({ token: tokenForUser(user), user, newArtist });
+          res.status(200).json({ token: tokenForUser(user), user });
         });
         console.log('NewArtist: ', newArtist);
       } else {
@@ -73,14 +72,14 @@ exports.signUp = async (req, res) => {
           email: req.body.email,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          artist: existingArtist._id,
+          artistId: existingArtist._id,
           artistName: existingArtist.name,
         });
         const artistName = existingArtist.name;
         console.log('existing Artist: ', artistName);
         user.setPassword(password);
         user.save().then(() => {
-          res.status(200).json({ token: tokenForUser(user), user, artistName });
+          res.status(200).json({ token: tokenForUser(user), user });
         });
       }
     });
@@ -89,23 +88,23 @@ exports.signUp = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   const { user } = req;
+  console.log('signIn req.user: ', user);
   const id = req.user.artistId;
   const artist = await Artist.findById(id);
 
   res.status(200).send({
     token: tokenForUser(user),
     user,
-    artistName: artist.name,
   });
 };
 
 exports.currentUser = async (req, res) => {
-  const id = req.user.artistId;
+  const { user } = req;
+  const id = user.artistId;
+  console.log('req.user: ', req.user);
   const artist = await Artist.findById(id);
-  const user = {
-    email: req.user.email,
-    token: tokenForUser(req.user),
-    artistName: artist.name,
-  };
-  res.status(200).send(user);
+  res.status(200).send({
+    token: tokenForUser(user),
+    user,
+  });
 };

@@ -14,6 +14,8 @@ import { updateEventThunk, getVenueQueryThunk } from './event-formSlice';
 
 function EventUpdate({ tourId, eventId, venueId }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.authenticated);
+  const artistId = useSelector((state) => state.auth.artistId);
   const venues = useSelector((state) => state.eventForm.venues);
   const tours = useSelector((state) => state.homePage.tours);
   const tour = tours.find((element) => element._id === tourId);
@@ -30,7 +32,7 @@ function EventUpdate({ tourId, eventId, venueId }) {
     newCity: event.venue.city,
     newState: event.venue.state,
     newZip: event.venue.zip,
-    artistId: '64f92397aa11269c12b9c746',
+    artistId,
   };
 
   const [values, setValues] = useState(initialValues);
@@ -62,12 +64,14 @@ function EventUpdate({ tourId, eventId, venueId }) {
   };
 
   const handleSubmitClick = () => {
-    dispatch(updateEventThunk(values));
+    dispatch(updateEventThunk({ data: values, token }));
+
     handleClose();
   };
 
   const handleVenueSearch = () => {
-    dispatch(getVenueQueryThunk({ query }));
+    // dispatch(getVenueQueryThunk({ query }));
+    dispatch(getVenueQueryThunk({ data: { query }, token }));
     console.log('data from submit: ', query);
   };
 

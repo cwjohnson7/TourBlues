@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import bootstrap from 'bootstrap';
+import '../../app/App.css';
+import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -10,7 +13,11 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 // import LineupForm from './lineup-form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import STATES from '../../utilities/states';
-import { addEventThunk, getVenueQueryThunk } from './event-formSlice';
+import {
+  addEventThunk,
+  closeEventForm,
+  getVenueQueryThunk,
+} from './event-formSlice';
 
 const initialValues = {
   venueName: '',
@@ -24,15 +31,37 @@ const initialValues = {
   city: '',
   state: '',
   zip: '',
-  artistId: '64f92397aa11269c12b9c746',
 };
 
-function EventForm({ tourId }) {
+const Venues = ({ currentItems }) => (
+  <div className="items">
+    {currentItems &&
+      currentItems.map((venue) => (
+        <ListGroup.Item
+          as="li"
+          key={venue.key}
+          className="d-flex justify-content-between align-items-start"
+          data-bs-theme="dark"
+        >
+          <div className="ms-2 me-auto">
+            <div className="fw-bold">{venue.name}</div>
+            <div className="ms-2 me-auto">{venue.address}</div>
+            <div className="fw-bold">Rating (Out of 5): {venue.rating}</div>
+          </div>
+        </ListGroup.Item>
+      ))}
+  </div>
+);
+
+function EventForm({ tourId, itemsPerPage }) {
   const dispatch = useDispatch();
   const venues = useSelector((state) => state.eventForm.venues);
+  const token = useSelector((state) => state.auth.authenticated);
+  const artistId = useSelector((state) => state.auth.artistId);
   const [values, setValues] = useState(initialValues);
   const [query, setQuery] = useState('');
   const [show, setShow] = useState(false);
+  values.artistId = artistId;
   values.tourId = tourId;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -52,32 +81,42 @@ function EventForm({ tourId }) {
 
   const handleSubmitClick = () => {
     console.log('values from form component: ', values);
-    dispatch(addEventThunk(values));
+    dispatch(addEventThunk({ data: values, token }));
     setValues(initialValues);
     handleClose();
   };
 
   const handleVenueSearch = () => {
-    dispatch(getVenueQueryThunk({ query }));
+    dispatch(getVenueQueryThunk({ data: { query }, token }));
     console.log('data from submit: ', query);
   };
 
-  const renderVenueQuery = () => {
-    if (venues) {
-      return venues.map((venue) => (
-        <ListGroup.Item
-          as="li"
-          key={venue.place_id}
-          className="d-flex justify-content-between align-items-start"
-          data-bs-theme="dark"
-        >
-          <div className="ms-2 me-auto">
-            <div className="fw-bold">{venue.name}</div>
-            {venue.formatted_address}
-          </div>
-        </ListGroup.Item>
-      ));
-    }
+  // pagination  variables
+  const [itemOffset, setItemOffset] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  // const itemsPerPage = 4;
+  useEffect(() => {
+    // Fetch items from another resources.
+    const endOffset = itemOffset + itemsPerPage;
+    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    console.log('Venue data: ', venues);
+    setCurrentItems(venues.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(venues.length / itemsPerPage));
+  }, [itemOffset, venues, itemsPerPage]);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % venues.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+
+  const handleCloseClick = () => {
+    dispatch(closeEventForm());
+    setCurrentItems([]);
+    handleClose();
   };
 
   return (
@@ -96,7 +135,7 @@ function EventForm({ tourId }) {
       {/* </Card.Body>
       </EventCard> */}
       {/* </Container> */}
-      <Offcanvas show={show} onHide={handleClose} backdrop="static">
+      <Offcanvas show={show} onHide={handleCloseClick} backdrop="static">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Event Form</Offcanvas.Title>
         </Offcanvas.Header>
@@ -119,9 +158,24 @@ function EventForm({ tourId }) {
             </Row>
             <Row>
               <SearchResults variant="flush" overflow-y="scroll">
-                {renderVenueQuery()}
+                <Venues currentItems={currentItems} />
+                <ReactPaginate
+                  breakLabel="..."
+                  nextLabel="next >"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={5}
+                  pageCount={pageCount}
+                  previousLabel="< previous"
+                  renderOnZeroPageCount={null}
+                  containerClassName="pagination"
+                  pageLinkClassName="page-num"
+                  previousLinkClassName="page-num"
+                  nextLinkClassName="page-num"
+                  activeLinkClassName="active"
+                />
               </SearchResults>
             </Row>
+            <Row />
             <hr />
             <h6>
               Add events to your Tour! Enter Venue/Address, Artists, and Contact
@@ -297,4 +351,8 @@ const SearchResults = styled(ListGroup)`
 
 EventForm.propTypes = {
   tourId: PropTypes.string.isRequired,
+  itemsPerPage: PropTypes.number.isRequired,
+};
+Venues.propTypes = {
+  currentItems: PropTypes.array.isRequired,
 };

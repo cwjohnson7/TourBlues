@@ -47,12 +47,23 @@ function TourView() {
           <Accordion.Body>
             <Row>
               <Col>
-                <h6>Address: </h6>
-                {event.venue.address}
-                {event.venue.city},
-                <div>
-                  {event.venue.state} {event.venue.zip}
-                </div>
+                <Row>
+                  <div>
+                    <h6>Address: </h6>
+                    {event.venue.address}
+                  </div>
+                  <br />
+                  <div>
+                    {event.venue.city}, {event.venue.state} {event.venue.zip}
+                  </div>
+                </Row>
+                <br />
+                <Row>
+                  <div>
+                    <h6>Set Length: </h6>
+                    {event.setLength} min
+                  </div>
+                </Row>
               </Col>
               <Col>
                 <h6>Lineup: </h6>
@@ -77,8 +88,20 @@ function TourView() {
                 </ListGroup>
               </Col>
               <Col>
-                <h6>Date: </h6>
-                {event.date}
+                <Row>
+                  <div>
+                    <h6>Date: </h6>
+                    {event.date}
+                  </div>
+                </Row>
+                <br />
+                <br />
+                <Row>
+                  <div>
+                    <h6>Doors: </h6>
+                    {event.doors}
+                  </div>
+                </Row>
               </Col>
             </Row>
             <Row>
@@ -123,7 +146,7 @@ function TourView() {
                   </Col>
                   <Col xs={6} />
                   <Col>
-                    <EventForm tourId={pathId} />
+                    <EventForm tourId={pathId} itemsPerPage={5} />
                   </Col>
                 </Row>
               </Card.Header>

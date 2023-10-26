@@ -3,18 +3,30 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteLineupArtistThunk } from '../homepage/HomePageSlice';
 
 function LineupDelete({ artistId, tourId, eventId }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.authenticated);
+  const currentArtistId = useSelector((state) => state.auth.artistId);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {
+    if (currentArtistId !== artistId) {
+      return setShow(true);
+    }
+    return alert('Cannot delete your own artist');
+  };
   const handleSubmitClick = () => {
-    dispatch(deleteLineupArtistThunk({ data: { eventId, tourId, artistId } }));
-    handleClose();
+    if (currentArtistId !== artistId) {
+      dispatch(
+        deleteLineupArtistThunk({ data: { eventId, tourId, artistId }, token })
+      );
+      handleClose();
+      return;
+    }
+    return alert('Cannot delete your own artist');
   };
 
   return (

@@ -11,7 +11,7 @@ import { updateTourThunk } from '../homepage/HomePageSlice';
 
 const TourUpdate = ({ tourId }) => {
   const dispatch = useDispatch();
-  const artistId = '64f92397aa11269c12b9c746';
+  const token = useSelector((state) => state.auth.authenticated);
   const tours = useSelector((state) => state.homePage.tours);
   const tour = tours.find((element) => element._id === tourId);
   const initialValues = {
@@ -37,7 +37,7 @@ const TourUpdate = ({ tourId }) => {
   };
 
   const handleSubmitClick = () => {
-    dispatch(updateTourThunk(values));
+    dispatch(updateTourThunk({ data: values, token }));
     handleClose();
   };
 

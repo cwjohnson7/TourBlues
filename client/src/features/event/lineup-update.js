@@ -11,6 +11,7 @@ import { updateLineupArtistThunk } from '../homepage/HomePageSlice';
 
 function LineupUpdate({ artistId, tourId, eventId }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.authenticated);
   const tours = useSelector((state) => state.homePage.tours);
   const tour = tours.find((element) => element._id === tourId);
   const event = tour.events.find((element) => element._id === eventId);
@@ -45,7 +46,7 @@ function LineupUpdate({ artistId, tourId, eventId }) {
     handleClose();
   };
   const handleSubmitClick = () => {
-    dispatch(updateLineupArtistThunk(values));
+    dispatch(updateLineupArtistThunk({ data: values, token }));
     // setValues(initialValues);
     handleClose();
   };

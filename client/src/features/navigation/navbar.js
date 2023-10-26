@@ -8,13 +8,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
-function Navigation() {
+const Navigation = () => {
   const authenticated = useSelector((state) => state.auth.authenticated);
-  console.log(authenticated);
-  console.log('navbar');
+  const artistName = useSelector((state) => state.auth.artistName);
+
+  console.log('token from NavBar: ', authenticated);
+  useEffect(() => {}, [authenticated]);
+
   // setUser(true);
 
   const navigate = useNavigate();
@@ -36,7 +39,7 @@ function Navigation() {
   const navButtons = () => {
     if (authenticated) {
       return (
-        <Form inline>
+        <Form inline="true">
           <Row>
             <Col xs="auto">
               <HomeButton
@@ -56,6 +59,11 @@ function Navigation() {
                 Sign Out
               </SignOutButton>
             </Col>
+            <Col xs="auto">
+              <ArtistName>
+                <h6>Artist: {artistName}</h6>
+              </ArtistName>
+            </Col>
           </Row>
         </Form>
       );
@@ -64,8 +72,8 @@ function Navigation() {
 
   const renderLinks = () => {
     /* verify if user is authenticated */
-    if (authenticated === 'authenticated') {
-      console.log('authenticated in renderSignOut');
+    if (authenticated) {
+      console.log('authenticated in renderLinks function');
       return (
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -86,9 +94,14 @@ function Navigation() {
       </Container>
     </Navbar>
   );
-}
+};
 
 export default Navigation;
+
+const ArtistName = styled.div`
+  justify-content: center;
+  margin-top: 8px;
+`;
 
 const HomeButton = styled(Button)`
   margin-left: 5px;

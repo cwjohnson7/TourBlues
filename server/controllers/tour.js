@@ -17,7 +17,9 @@ exports.addTour = async (req, res) => {
 };
 
 exports.getUserTours = async (req, res) => {
-  const artistId = req.params.artist;
+  // const artistId = req.params.artist;
+  const artistId = req.user.artistId;
+  console.log('artistId from route: ', artistId);
 
   // console.log('req.params', req.params);
   // ^^ will instead probably use req.user.artistId to grab artist Id and then search for tours associated w/ that artist; can populate lineups/events here or do subsequent get requests for each time user navigates to drill down to the same

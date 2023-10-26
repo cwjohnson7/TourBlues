@@ -4,9 +4,6 @@
 #misc
 /node_modules
 
-#config
-/config
-
 #env
 .env
 .env.local

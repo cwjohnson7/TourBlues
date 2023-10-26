@@ -4,8 +4,6 @@
 #temporary
 .DS_Store
 
-#config
-/config
 
 #env
 .env
